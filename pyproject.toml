@@ -23,7 +23,7 @@ dependencies = [
 
 [project.optional-dependencies]
 providers = ["anthropic>=0.40", "google-genai>=1.0", "openai>=1.0"]
-hardware = ["ppk2-api @ git+https://github.com/IRNAS/ppk2-api.git"]
+hardware = ["ppk2-api>=0.9.2"]
 assets = ["huggingface_hub>=0.23"]
 dev = ["pytest>=8", "ruff>=0.8"]
 

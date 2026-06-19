@@ -1,0 +1,1 @@
+{"content":"{\"model_path\":\"models/ai85-cifar10-qat8-q.pth.tar\",\"yaml_path\":\"networks/cifar10-nas.yaml\",\"sample_input_path\":\"samples/sample_cifar-10.npy\",\"prefix\":\"smoke_cifar10\"}"}

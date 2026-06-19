@@ -4,9 +4,9 @@ set -e
 
 # Configuration
 CONFIGS=(
-    "configs/experiments/hil-peakCurrent-max78000.yaml"
-    "configs/experiments/hil-peakCurrent-max78000-doc.yaml"
-    "configs/experiments/hil-peakCurrent-max78000-no-feedback.yaml"
+    "configs/benchmarks/power/max78000/peak-current/hil.yaml"
+    "configs/benchmarks/power/max78000/peak-current/documentation.yaml"
+    "configs/benchmarks/power/max78000/peak-current/score.yaml"
 )
 
 MODELS=(
@@ -84,7 +84,7 @@ run_experiment() {
     echo "Output: $output_dir"
     echo "=========================================="
 
-    if python -m src.run "$config" --llm "$llm" --reasoning high --snapshot-sandbox --output-name "$output_name"; then
+    if embedded-arena run "$config" --llm "$llm" --reasoning high --snapshot-sandbox --output-name "$output_name"; then
         echo -e "${GREEN}✓ SUCCESS${NC}: $output_name"
         TOTAL_SUCCESSFUL=$((TOTAL_SUCCESSFUL + 1))
         CONSECUTIVE_FAILURES=0

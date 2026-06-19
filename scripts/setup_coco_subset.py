@@ -42,6 +42,10 @@ COCO_NAMES = [
 ]
 
 
+def log(message: str) -> None:
+    print(message, flush=True)
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", default=".data/coco.zip", help="Output zip path.")
@@ -149,11 +153,13 @@ def main() -> int:
     coco_dir = work_dir / "coco"
 
     if output.exists() and not args.force:
-        print(f"{output} already exists; use --force to recreate it")
+        log(f"{output} already exists; use --force to recreate it")
         return 0
 
     rng = random.Random(args.seed)
+    log(f"Preparing COCO subset in {work_dir}")
     labels_root = ensure_labels(args.labels_url, work_dir)
+    log("Sampling labeled examples")
     train_labels = sample_labels(labels_root, "train2017", args.train_count + args.val_count, rng)
     test_labels = sample_labels(labels_root, "val2017", args.test_count, rng)
 
@@ -181,7 +187,7 @@ def main() -> int:
         test_lines.append(rel)
         jobs.append(("val2017", label.with_suffix(".jpg").name, coco_dir / rel))
 
-    print(f"Downloading {len(jobs)} selected COCO images...")
+    log(f"Downloading {len(jobs)} selected COCO images...")
     failures: list[tuple[str, str]] = []
     with concurrent.futures.ThreadPoolExecutor(max_workers=args.workers) as pool:
         for image_name, ok, detail in pool.map(fetch_image, jobs):
@@ -196,10 +202,11 @@ def main() -> int:
     (coco_dir / "val.txt").write_text("\n".join(val_lines) + "\n", encoding="utf-8")
     (coco_dir / "test.txt").write_text("\n".join(test_lines) + "\n", encoding="utf-8")
     write_yaml(coco_dir)
+    log(f"Packaging {output}")
     zip_dir(coco_dir, output)
 
-    print(f"Wrote {output}")
-    print(f"  train={len(train_lines)} val={len(val_lines)} test={len(test_lines)} seed={args.seed}")
+    log(f"Wrote {output}")
+    log(f"  train={len(train_lines)} val={len(val_lines)} test={len(test_lines)} seed={args.seed}")
     return 0
 
 

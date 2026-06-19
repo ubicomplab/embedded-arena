@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-CONFIG="${ROOT_DIR}/configs/experiments/smoke-gradient-flow.yaml"
+CONFIG="${ROOT_DIR}/configs/smoke/gradient-flow.yaml"
 PYTHON_BIN="${PYTHON_BIN:-${ROOT_DIR}/venv/bin/python}"
 OUTPUT_PREFIX="${OUTPUT_PREFIX:-llm-adapter-smoke}"
 REASONING="${REASONING:-high}"
@@ -58,7 +58,7 @@ for model in "${MODELS[@]}"; do
   rm -rf "${output_dir}"
   (
     cd "${ROOT_DIR}"
-    "${PYTHON_BIN}" -m src.run "${CONFIG}" \
+    embedded-arena run "${CONFIG}" \
       --llm "${model}" \
       --reasoning "${REASONING}" \
       --output-name "${output_name}"

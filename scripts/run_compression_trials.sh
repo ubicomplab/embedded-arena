@@ -68,12 +68,12 @@ if [ -f "${ROOT_DIR}/.env" ]; then
 fi
 
 CONFIGS=(
-  "configs/experiments/compression-no-feedback-max78000.yaml"
-  "configs/experiments/compression-documentation-max78000.yaml"
-  "configs/experiments/compression-feedback-max78000.yaml"
-  "configs/experiments/compression-no-feedback-stm32nucleo.yaml"
-  "configs/experiments/compression-documentation-stm32nucleo.yaml"
-  "configs/experiments/compression-feedback-stm32nucleo.yaml"
+  "configs/benchmarks/compression/max78000/score.yaml"
+  "configs/benchmarks/compression/max78000/documentation.yaml"
+  "configs/benchmarks/compression/max78000/hil.yaml"
+  "configs/benchmarks/compression/stm32n6/score.yaml"
+  "configs/benchmarks/compression/stm32n6/documentation.yaml"
+  "configs/benchmarks/compression/stm32n6/hil.yaml"
 )
 
 MODELS=(
@@ -239,7 +239,7 @@ for config in "${CONFIGS[@]}"; do
     fi
 
     cmd=(
-      "${PYTHON_BIN}" -m src.run "${config}"
+      embedded-arena run "${config}"
       task.trials "${missing}"
       --llm "${model}"
       --reasoning "${REASONING}"

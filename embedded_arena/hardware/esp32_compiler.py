@@ -13,7 +13,6 @@ from __future__ import annotations
 import glob
 import os
 import re
-import shlex
 import subprocess
 from pathlib import Path
 
@@ -72,6 +71,8 @@ class ESP32Compiler:
         # Use ESP-IDF's Python venv for idf.py so imports (esp_idf_monitor, etc.)
         # resolve correctly and don't depend on the script's Python environment.
         idf_python = env.get("IDF_PYTHON_ENV_PATH")
+        if idf_python and os.path.isdir(idf_python):
+            idf_python = os.path.join(idf_python, "bin", "python")
         if not idf_python:
             # Look under the common ~/.espressif/python_env directory
             pyenv_dir = os.path.expanduser("~/.espressif/python_env")
@@ -79,11 +80,11 @@ class ESP32Compiler:
                 # pick the first env that contains bin/python
                 for name in sorted(os.listdir(pyenv_dir)):
                     candidate = os.path.join(pyenv_dir, name, "bin", "python")
-                    if os.path.isfile(candidate):
+                    if os.path.exists(candidate):
                         idf_python = candidate
                         break
 
-        if not idf_python or not os.path.isfile(idf_python):
+        if not idf_python or not os.path.exists(idf_python):
             return (
                 "ESP-IDF Python environment not found. Set IDF_PYTHON_ENV_PATH or "
                 "ensure ~/.espressif/python_env contains a Python installation.",
@@ -185,22 +186,6 @@ class ESP32Compiler:
         timeout: int,
     ) -> subprocess.CompletedProcess:
         """Run idf in the project cwd; inherit stdout/stderr so logs appear in the host terminal."""
-        export_sh = os.path.join(env.get("IDF_PATH", ""), "export.sh")
-        if os.path.isfile(export_sh):
-            shell_parts = [f"source {shlex.quote(export_sh)} 1>&2", "&&"]
-            shell_parts.extend(shlex.quote(part) for part in command)
-            shell_cmd = " ".join(shell_parts)
-            process = subprocess.run(
-                ["bash", "-lc", shell_cmd],
-                cwd=self.project_root,
-                timeout=timeout,
-                env=env,
-                capture_output=True,
-                text=True,
-            )
-            self._emit_output(process)
-            return process
-
         process = subprocess.run(
             command,
             cwd=self.project_root,

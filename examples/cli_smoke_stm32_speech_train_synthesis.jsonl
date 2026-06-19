@@ -1,0 +1,1 @@
+{"content":"{\"model_path\":\"models/stm32_speech_smoke_model.py\",\"data_path\":\"reference_dataset\",\"epochs\":10,\"train_limit\":64}"}

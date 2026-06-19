@@ -8,10 +8,15 @@ DATASET_ID="${HF_REFERENCE_DATASET_ID:-KoelLabs/SpeechOcean}"
 MODEL_DIR="${ASSET_DIR}/models/${MODEL_ID}"
 DATASET_DIR="${ASSET_DIR}/datasets/${DATASET_ID}"
 ENV_FILE="${ROOT_DIR}/.env"
-PYTHON_BIN="${PYTHON_BIN:-${ROOT_DIR}/venv/bin/python}"
 
-if [ ! -x "${PYTHON_BIN}" ]; then
-  PYTHON_BIN="python3"
+if [ -z "${PYTHON_BIN:-}" ]; then
+  if [ -x "${ROOT_DIR}/.venv/bin/python" ]; then
+    PYTHON_BIN="${ROOT_DIR}/.venv/bin/python"
+  elif [ -x "${ROOT_DIR}/venv/bin/python" ]; then
+    PYTHON_BIN="${ROOT_DIR}/venv/bin/python"
+  else
+    PYTHON_BIN="python3"
+  fi
 fi
 
 mkdir -p "${MODEL_DIR}" "${DATASET_DIR}"

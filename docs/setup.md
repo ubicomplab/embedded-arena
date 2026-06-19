@@ -96,7 +96,7 @@ MAX78000_INSTALL_TRAINING_REQUIREMENTS=1 ./scripts/setup_max78000.sh
 Verify synthesis without physical hardware:
 
 ```bash
-CLI_LLM_SCRIPT=examples/cli_smoke_gradient_flow.jsonl \
+CLI_LLM_SCRIPT=examples/cli_smoke_synthesis_max78000.jsonl \
   embedded-arena run configs/smoke/synthesis-max78000.yaml \
   --llm cli/scripted \
   --iterations 1 \
@@ -120,7 +120,7 @@ ESP32 thermal experiments use ESP-IDF for the target TinyLLaMA firmware and Plat
 - [ESP-IDF GitHub](https://github.com/espressif/esp-idf)
 - [PlatformIO Core](https://docs.platformio.org/en/latest/core/installation/index.html)
 
-The setup script clones ESP-IDF under `.data/toolchains/esp-idf`, runs Espressif's installer, detects a serial port when possible, and writes `IDF_PATH`, `ESP32_PORT`, and `ESP32_BAUD` to `.env`:
+The setup script clones ESP-IDF under `.data/toolchains/esp-idf`, runs Espressif's installer, detects a serial port when possible, and writes `IDF_PATH`, `IDF_PYTHON_ENV_PATH`, `ESP32_PORT`, and `ESP32_BAUD` to `.env`:
 
 ```bash
 ./scripts/setup_esp32.sh
@@ -129,7 +129,22 @@ The setup script clones ESP-IDF under `.data/toolchains/esp-idf`, runs Espressif
 set -a; source .env; set +a
 ```
 
-Do not source `export.sh` in the same shell before running `embedded-arena`; the framework calls ESP-IDF's `idf.py` through `IDF_PATH` and should keep using your project virtual environment.
+If an ESP-IDF download is interrupted and later submodule recovery fails, rerun:
+
+```bash
+./scripts/setup_esp32.sh --force-reinstall
+```
+
+This moves the partial install aside and clones a clean ESP-IDF copy.
+
+Do not source `export.sh` in the same shell before running `embedded-arena`; the framework calls ESP-IDF's `idf.py` through `IDF_PATH` and `IDF_PYTHON_ENV_PATH` while keeping your project virtual environment active.
+
+Verify the ESP-IDF install without a connected board:
+
+```bash
+IDF_PYTHON_ENV_PATH="$IDF_PYTHON_ENV_PATH" \
+  "$IDF_PYTHON_ENV_PATH/bin/python" "$IDF_PATH/tools/idf.py" --version
+```
 
 Flash the IR camera bridge once after wiring the MLX90640 sensor:
 
@@ -162,7 +177,7 @@ The script extracts `stedgeai`, writes `STM32AI_COMMAND`, `STM32AI_DIR`, and `ST
 Verify synthesis:
 
 ```bash
-CLI_LLM_SCRIPT=examples/cli_smoke_gradient_flow.jsonl \
+CLI_LLM_SCRIPT=examples/cli_smoke_synthesis_stm32n6.jsonl \
   embedded-arena run configs/smoke/synthesis-stm32n6.yaml \
   --llm cli/scripted \
   --iterations 1 \
