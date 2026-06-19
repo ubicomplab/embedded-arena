@@ -1,77 +1,88 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="680" viewBox="0 0 1100 680" role="img" aria-labelledby="title desc">
-<title id="title">Embedded Arena model success versus token utilization</title>
-<desc id="desc">Average HIL compression task success rate plotted against average token usage. The x-axis is reversed so lower token use appears to the right.</desc>
-<rect width="100%" height="100%" rx="18" fill="#ffffff"/>
-<style>text{font-family:Google Sans,Arial,sans-serif;fill:#1f2937}.axis{stroke:#374151;stroke-width:1.5}.grid{stroke:#e5e7eb;stroke-width:1}.tick{font-size:14px;fill:#4b5563}.label{font-size:18px;font-weight:600}.small{font-size:13px;fill:#6b7280}.model{font-size:13px;font-weight:600}.legend{font-size:14px;font-weight:600}</style>
-<text x="110" y="38" font-size="24" font-weight="700">Average HIL Deployment Success vs. Token Utilization</text>
-<text x="110" y="62" class="small">Compression tasks: MAX78000 YOLO + STM32N6 speech-to-IPA. Top right is best.</text>
-<line class="grid" x1="110" y1="570.0" x2="850" y2="570.0"/>
-<text class="tick" x="94" y="575.0" text-anchor="end">0%</text>
-<line class="grid" x1="110" y1="454.7" x2="850" y2="454.7"/>
-<text class="tick" x="94" y="459.7" text-anchor="end">20%</text>
-<line class="grid" x1="110" y1="339.4" x2="850" y2="339.4"/>
-<text class="tick" x="94" y="344.4" text-anchor="end">40%</text>
-<line class="grid" x1="110" y1="224.1" x2="850" y2="224.1"/>
-<text class="tick" x="94" y="229.1" text-anchor="end">60%</text>
-<line class="grid" x1="110" y1="108.8" x2="850" y2="108.8"/>
-<text class="tick" x="94" y="113.8" text-anchor="end">80%</text>
-<line class="grid" x1="850.0" y1="80" x2="850.0" y2="570"/>
-<text class="tick" x="850.0" y="598" text-anchor="middle">0</text>
-<line class="grid" x1="702.0" y1="80" x2="702.0" y2="570"/>
-<text class="tick" x="702.0" y="598" text-anchor="middle">2</text>
-<line class="grid" x1="554.0" y1="80" x2="554.0" y2="570"/>
-<text class="tick" x="554.0" y="598" text-anchor="middle">4</text>
-<line class="grid" x1="406.0" y1="80" x2="406.0" y2="570"/>
-<text class="tick" x="406.0" y="598" text-anchor="middle">6</text>
-<line class="grid" x1="258.0" y1="80" x2="258.0" y2="570"/>
-<text class="tick" x="258.0" y="598" text-anchor="middle">8</text>
-<line class="grid" x1="110.0" y1="80" x2="110.0" y2="570"/>
-<text class="tick" x="110.0" y="598" text-anchor="middle">10</text>
-<line class="axis" x1="110" y1="570" x2="850" y2="570"/>
-<line class="axis" x1="110" y1="80" x2="110" y2="570"/>
-<text class="label" x="480.0" y="646" text-anchor="middle">Token utilization (M tokens, lower is better →)</text>
-<text class="label" transform="translate(32,325.0) rotate(-90)" text-anchor="middle">Average task success rate</text>
-<line x1="808.2" y1="281.8" x2="626.5" y2="195.3" stroke="#C26401" stroke-width="2.3" opacity="0.55"/>
-<line x1="662.4" y1="368.2" x2="772.7" y2="570.0" stroke="#C26401" stroke-width="2.3" opacity="0.55"/>
-<line x1="761.9" y1="281.8" x2="679.4" y2="108.8" stroke="#188038" stroke-width="2.3" opacity="0.55"/>
-<line x1="769.0" y1="570.0" x2="605.8" y2="483.5" stroke="#188038" stroke-width="2.3" opacity="0.55"/>
-<line x1="244.7" y1="339.4" x2="438.2" y2="281.8" stroke="#1967D2" stroke-width="2.3" opacity="0.55"/>
-<line x1="499.2" y1="570.0" x2="384.9" y2="570.0" stroke="#1967D2" stroke-width="2.3" opacity="0.55"/>
-<rect x="801.2" y="274.8" width="14" height="14" rx="2" fill="#C26401" stroke="#fff" stroke-width="2"/>
-<text class="model" x="818.2" y="269.8">Opus 4.7 L</text>
-<rect x="619.5" y="188.3" width="14" height="14" rx="2" fill="#C26401" stroke="#fff" stroke-width="2"/>
-<text class="model" x="636.5" y="185.3">Opus 4.7 H</text>
-<rect x="655.4" y="361.2" width="14" height="14" rx="2" fill="#C26401" stroke="#fff" stroke-width="2"/>
-<text class="model" x="672.4" y="358.2">Sonnet 4.6 L</text>
-<rect x="765.7" y="563.0" width="14" height="14" rx="2" fill="#C26401" stroke="#fff" stroke-width="2"/>
-<text class="model" x="782.7" y="588.0">Sonnet 4.6 H</text>
-<circle cx="761.9" cy="281.8" r="8" fill="#188038" stroke="#fff" stroke-width="2"/>
-<text class="model" x="771.9" y="301.8">GPT-5.4 L</text>
-<circle cx="679.4" cy="108.8" r="8" fill="#188038" stroke="#fff" stroke-width="2"/>
-<text class="model" x="689.4" y="98.8">GPT-5.4 H</text>
-<circle cx="769.0" cy="570.0" r="8" fill="#188038" stroke="#fff" stroke-width="2"/>
-<text class="model" x="779.0" y="558.0">GPT-5.4 mini L</text>
-<circle cx="605.8" cy="483.5" r="8" fill="#188038" stroke="#fff" stroke-width="2"/>
-<text class="model" x="615.8" y="473.5">GPT-5.4 mini H</text>
-<path d="M 244.7 330.4 L 236.2 346.4 L 253.2 346.4 Z" fill="#1967D2" stroke="#fff" stroke-width="2"/>
-<text class="model" x="254.7" y="327.4">Gemini 3.1 Pro L</text>
-<path d="M 438.2 272.8 L 429.7 288.8 L 446.7 288.8 Z" fill="#1967D2" stroke="#fff" stroke-width="2"/>
-<text class="model" x="448.2" y="271.8">Gemini 3.1 Pro H</text>
-<path d="M 499.2 561.0 L 490.7 577.0 L 507.7 577.0 Z" fill="#1967D2" stroke="#fff" stroke-width="2"/>
-<text class="model" x="509.2" y="558.0">Gemini 3 Flash L</text>
-<path d="M 384.9 561.0 L 376.4 577.0 L 393.4 577.0 Z" fill="#1967D2" stroke="#fff" stroke-width="2"/>
-<text class="model" x="394.9" y="588.0">Gemini 3 Flash H</text>
-<path d="M 778 118 L 828 118 L 828 168" fill="none" stroke="#188038" stroke-width="3" stroke-linecap="round"/>
-<text x="834" y="114" fill="#188038" font-size="13" font-weight="700">best</text>
-<rect x="867" y="76" width="190" height="176" rx="12" fill="#f8fafc" stroke="#e5e7eb"/>
-<text class="legend" x="885" y="98">Provider</text>
-<circle cx="893.0" cy="123.0" r="8" fill="#188038" stroke="#fff" stroke-width="2"/>
-<text class="tick" x="913" y="128">OpenAI</text>
-<rect x="886.0" y="146.0" width="14" height="14" rx="2" fill="#C26401" stroke="#fff" stroke-width="2"/>
-<text class="tick" x="913" y="158">Claude</text>
-<path d="M 893.0 174.0 L 884.5 190.0 L 901.5 190.0 Z" fill="#1967D2" stroke="#fff" stroke-width="2"/>
-<text class="tick" x="913" y="188">Gemini</text>
-<line x1="885" y1="212" x2="929" y2="212" stroke="#6b7280" stroke-width="2"/>
-<text class="tick" x="940" y="217">Low ↔ High</text>
-<text class="small" x="885" y="242">Labels: model + thinking</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="700" viewBox="0 0 1120 700" role="img" aria-labelledby="title desc">
+<title id="title">Embedded Arena benchmark success versus token utilization</title>
+<desc id="desc">Average HIL task success rate plotted against token utilization. The x-axis is reversed so fewer tokens appear to the right.</desc>
+<style>
+  .axis { stroke: #27303f; stroke-width: 1.7; }
+  .grid { stroke: #e5e7eb; stroke-width: 1; }
+  .tick { fill: #374151; font: 14px Inter, Arial, sans-serif; }
+  .label { fill: #111827; font: 17px Inter, Arial, sans-serif; font-weight: 650; }
+  .title { fill: #111827; font: 26px Inter, Arial, sans-serif; font-weight: 800; }
+  .subtitle { fill: #4b5563; font: 14px Inter, Arial, sans-serif; }
+  .point-label { fill: #111827; font: 13px Inter, Arial, sans-serif; font-weight: 620; paint-order: stroke; stroke: #fff; stroke-width: 4px; stroke-linejoin: round; }
+  .legend { fill: #374151; font: 13px Inter, Arial, sans-serif; }
+  .best-label { fill: #be123c; font: 14px Inter, Arial, sans-serif; font-weight: 800; paint-order: stroke; stroke: #fff; stroke-width: 4px; }
+</style>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<rect x="125" y="82" width="923" height="506" fill="#fbfdff" stroke="#d1d5db" stroke-width="1"/>
+<line class="grid" x1="1048.00" y1="82" x2="1048.00" y2="588"/>
+<text class="tick" x="1048.00" y="616" text-anchor="middle">0</text>
+<line class="grid" x1="863.40" y1="82" x2="863.40" y2="588"/>
+<text class="tick" x="863.40" y="616" text-anchor="middle">2</text>
+<line class="grid" x1="678.80" y1="82" x2="678.80" y2="588"/>
+<text class="tick" x="678.80" y="616" text-anchor="middle">4</text>
+<line class="grid" x1="494.20" y1="82" x2="494.20" y2="588"/>
+<text class="tick" x="494.20" y="616" text-anchor="middle">6</text>
+<line class="grid" x1="309.60" y1="82" x2="309.60" y2="588"/>
+<text class="tick" x="309.60" y="616" text-anchor="middle">8</text>
+<line class="grid" x1="125.00" y1="82" x2="125.00" y2="588"/>
+<text class="tick" x="125.00" y="616" text-anchor="middle">10</text>
+<line class="grid" x1="125" y1="588.00" x2="1048" y2="588.00"/>
+<text class="tick" x="111" y="593.00" text-anchor="end">0%</text>
+<line class="grid" x1="125" y1="468.94" x2="1048" y2="468.94"/>
+<text class="tick" x="111" y="473.94" text-anchor="end">20%</text>
+<line class="grid" x1="125" y1="349.88" x2="1048" y2="349.88"/>
+<text class="tick" x="111" y="354.88" text-anchor="end">40%</text>
+<line class="grid" x1="125" y1="230.82" x2="1048" y2="230.82"/>
+<text class="tick" x="111" y="235.82" text-anchor="end">60%</text>
+<line class="grid" x1="125" y1="111.76" x2="1048" y2="111.76"/>
+<text class="tick" x="111" y="116.76" text-anchor="end">80%</text>
+<line class="axis" x1="125" y1="588" x2="1048" y2="588"/>
+<line class="axis" x1="125" y1="82" x2="125" y2="588"/>
+<text class="title" x="560.0" y="36" text-anchor="middle">Average HIL Success vs. Token Utilization</text>
+<text class="subtitle" x="560.0" y="60" text-anchor="middle">Top-right is best: higher successful iterations with fewer tokens</text>
+<text class="label" x="586.5" y="662" text-anchor="middle">Token utilization per run (M, lower is better)</text>
+<text class="label" transform="translate(34 335.0) rotate(-90)" text-anchor="middle">Average task success rate</text>
+<path d="M 881.86 171.29 L 1015.70 105.81" stroke="#be123c" stroke-width="2.8" stroke-dasharray="6 5" fill="none" marker-end="url(#arrow)"/>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#be123c"/></marker></defs>
+<circle cx="1015.70" cy="105.81" r="10" fill="#ffe4e6" stroke="#be123c" stroke-width="2.5"/>
+<text class="best-label" x="1007.70" y="87.81" text-anchor="end">best</text>
+<line x1="995.85" y1="290.35" x2="769.25" y2="201.06" stroke="#d97706" stroke-width="2.5" opacity="0.72"/>
+<line x1="814.02" y1="379.65" x2="951.55" y2="588.00" stroke="#d97706" stroke-width="2.5" opacity="0.72"/>
+<line x1="938.16" y1="290.35" x2="835.25" y2="111.76" stroke="#16a34a" stroke-width="2.5" opacity="0.72"/>
+<line x1="946.93" y1="588.00" x2="743.41" y2="498.71" stroke="#16a34a" stroke-width="2.5" opacity="0.72"/>
+<line x1="292.99" y1="349.88" x2="534.35" y2="290.35" stroke="#2563eb" stroke-width="2.5" opacity="0.72"/>
+<line x1="610.50" y1="588.00" x2="467.89" y2="588.00" stroke="#2563eb" stroke-width="2.5" opacity="0.72"/>
+<rect class="" x="989.25" y="283.75" width="13.20" height="13.20" rx="2" fill="#d97706" stroke="#fff" stroke-width="2.5"/>
+<text class="point-label" x="985.85" y="276.35" text-anchor="end">Opus L</text>
+<rect class="" x="762.65" y="194.46" width="13.20" height="13.20" rx="2" fill="#d97706" stroke="#fff" stroke-width="2.5"/>
+<text class="point-label" x="777.25" y="185.06" text-anchor="start">Opus H</text>
+<rect class="" x="807.42" y="373.05" width="13.20" height="13.20" rx="2" fill="#d97706" stroke="#fff" stroke-width="2.5"/>
+<text class="point-label" x="822.02" y="365.65" text-anchor="start">Sonnet L</text>
+<rect class="" x="944.95" y="581.40" width="13.20" height="13.20" rx="2" fill="#d97706" stroke="#fff" stroke-width="2.5"/>
+<text class="point-label" x="959.55" y="606.00" text-anchor="start">Sonnet H</text>
+<circle class="" cx="938.16" cy="290.35" r="8" fill="#16a34a" stroke="#fff" stroke-width="2.5"/>
+<text class="point-label" x="946.16" y="306.35" text-anchor="start">GPT-5.4 L</text>
+<circle class="" cx="835.25" cy="111.76" r="8" fill="#16a34a" stroke="#fff" stroke-width="2.5"/>
+<text class="point-label" x="843.25" y="95.76" text-anchor="start">GPT-5.4 H</text>
+<circle class="" cx="946.93" cy="588.00" r="8" fill="#16a34a" stroke="#fff" stroke-width="2.5"/>
+<text class="point-label" x="954.93" y="610.00" text-anchor="start">mini L</text>
+<circle class="" cx="743.41" cy="498.71" r="8" fill="#16a34a" stroke="#fff" stroke-width="2.5"/>
+<text class="point-label" x="751.41" y="484.71" text-anchor="start">mini H</text>
+<polygon class="" points="292.99,339.48 280.51,359.06 305.47,359.06" fill="#2563eb" stroke="#fff" stroke-width="2.5"/>
+<text class="point-label" x="300.99" y="367.88" text-anchor="start">Gemini Pro L</text>
+<polygon class="" points="534.35,279.95 521.87,299.53 546.83,299.53" fill="#2563eb" stroke="#fff" stroke-width="2.5"/>
+<text class="point-label" x="542.35" y="274.35" text-anchor="start">Gemini Pro H</text>
+<polygon class="" points="610.50,577.60 598.02,597.18 622.98,597.18" fill="#2563eb" stroke="#fff" stroke-width="2.5"/>
+<text class="point-label" x="618.50" y="612.00" text-anchor="start">Flash L</text>
+<polygon class="" points="467.89,577.60 455.41,597.18 480.37,597.18" fill="#2563eb" stroke="#fff" stroke-width="2.5"/>
+<text class="point-label" x="475.89" y="627.00" text-anchor="start">Flash H</text>
+<rect x="782" y="80" width="258" height="96" rx="10" fill="#ffffff" stroke="#e5e7eb" opacity="0.96"/>
+<circle class="" cx="798.00" cy="100.00" r="6" fill="#16a34a" stroke="#fff" stroke-width="2.5"/>
+<text class="legend" x="818" y="105" text-anchor="start">OpenAI</text>
+<rect class="" x="793.05" y="121.05" width="9.90" height="9.90" rx="2" fill="#d97706" stroke="#fff" stroke-width="2.5"/>
+<text class="legend" x="818" y="131" text-anchor="start">Claude</text>
+<polygon class="" points="798.00,144.20 788.64,158.88 807.36,158.88" fill="#2563eb" stroke="#fff" stroke-width="2.5"/>
+<text class="legend" x="818" y="157" text-anchor="start">Google</text>
+<circle cx="802" cy="178" r="7" fill="#ffe4e6" stroke="#be123c" stroke-width="2"/>
+<text class="legend" x="818" y="183" text-anchor="start">Ideal direction</text>
 </svg>
