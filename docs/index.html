@@ -82,16 +82,29 @@
     .publication-authors {
       font-family: "Castoro", Georgia, serif;
       margin: 0.5rem auto;
-      max-width: 1080px;
-      font-size: clamp(1.2rem, 2.5vw, 1.92rem);
-      line-height: 1.25;
+      max-width: 1280px;
+      font-size: clamp(1.05rem, 1.85vw, 1.55rem);
+      line-height: 1.35;
       color: #000000;
       font-weight: 400;
     }
 
+    .author-row {
+      display: flex;
+      justify-content: center;
+      align-items: baseline;
+      gap: 0.9rem 1.25rem;
+      flex-wrap: nowrap;
+    }
+
+    .author-row + .author-row {
+      margin-top: 0.18rem;
+    }
+
     .author-block {
-      display: inline-block;
-      margin: 0 0.45rem;
+      display: inline-flex;
+      align-items: baseline;
+      margin: 0;
       white-space: nowrap;
     }
 
@@ -112,24 +125,24 @@
 
     .author-block .affil-logo.uw {
       width: auto;
-      height: 0.62em;
+      height: 0.44em;
       transform: translateY(-0.08em);
     }
 
     .author-block .affil-logo.ucsd {
       width: auto;
-      height: 0.62em;
+      height: 0.44em;
       transform: translateY(-0.04em);
     }
 
     .author-block .affil-logo.neu {
       width: auto;
-      height: 0.62em;
+      height: 0.44em;
       transform: translateY(-0.04em);
     }
 
     .equal {
-      font-size: 0.62em;
+      font-size: 0.55em;
       vertical-align: super;
       margin-left: 0.05em;
     }
@@ -162,13 +175,13 @@
     }
 
     .affiliation-item .affil-logo.uw {
-      width: 0.92em;
+      width: 0.72em;
       height: auto;
     }
 
     .affiliation-item .affil-logo.ucsd,
     .affiliation-item .affil-logo.neu {
-      width: 0.74em;
+      width: 0.56em;
       height: auto;
     }
 
@@ -357,6 +370,10 @@
         white-space: normal;
       }
 
+      .author-row {
+        flex-wrap: wrap;
+      }
+
       .publication-title {
         white-space: normal;
       }
@@ -387,21 +404,25 @@
       <h1 class="publication-title">Embedded Arena: Iterative Optimization via Hardware Feedback</h1>
 
       <div class="publication-authors" aria-label="Authors">
-        <span class="author-block"><a href="https://homes.cs.washington.edu/~zzhihan/" target="_blank" rel="noopener">Zhihan Zhang</a><img class="affil-logo uw" src="assets/uw_affiliation.png" alt=""><span class="equal">*</span></span>
-        <span class="author-block"><a href="https://sandergi.com/" target="_blank" rel="noopener">Alexander Le Metzger</a><img class="affil-logo uw" src="assets/uw_affiliation.png" alt=""><span class="equal">*</span></span>
-        <span class="author-block"><a href="https://www.linkedin.com/in/jiuyang-lyu-92ab28222/" target="_blank" rel="noopener">Jiuyang Lyu</a><img class="affil-logo uw" src="assets/uw_affiliation.png" alt=""><span class="equal">*</span></span>
-        <span class="author-block"><a href="https://www.linkedin.com/in/chuncheng-chang/" target="_blank" rel="noopener">Chun-Cheng Chang</a><img class="affil-logo uw" src="assets/uw_affiliation.png" alt=""></span>
-        <br>
-        <span class="author-block"><a href="https://www.linkedin.com/in/jiayishao/" target="_blank" rel="noopener">Jiayi Shao</a><img class="affil-logo uw" src="assets/uw_affiliation.png" alt=""></span>
-        <span class="author-block"><a href="https://scholar.google.com/citations?user=G9aIhu0AAAAJ&amp;hl=en" target="_blank" rel="noopener">Yujia Liu</a><img class="affil-logo ucsd" src="assets/ucsd_affiliation.png" alt=""></span>
-        <span class="author-block"><a href="https://emazuh.github.io/" target="_blank" rel="noopener">Emmanuel Azuh Mensah</a><img class="affil-logo uw" src="assets/uw_affiliation.png" alt=""></span>
-        <span class="author-block"><a href="https://jacobsschool.ucsd.edu/people/profile/edward-wang" target="_blank" rel="noopener">Edward Wang</a><img class="affil-logo ucsd" src="assets/ucsd_affiliation.png" alt=""></span>
-        <span class="author-block"><a href="https://kurti.sh/" target="_blank" rel="noopener">Kurtis Heimerl</a><img class="affil-logo uw" src="assets/uw_affiliation.png" alt=""></span>
-        <br>
-        <span class="author-block"><a href="https://coe.northeastern.edu/people/abowd-gregory/" target="_blank" rel="noopener">Gregory D. Abowd</a><img class="affil-logo neu" src="assets/northeastern_affiliation.png" alt=""></span>
-        <span class="author-block"><a href="https://www.cs.washington.edu/people/faculty/shwetak-patel/" target="_blank" rel="noopener">Shwetak Patel</a><img class="affil-logo uw" src="assets/uw_affiliation.png" alt=""></span>
-        <span class="author-block"><a href="https://natashajaques.ai/" target="_blank" rel="noopener">Natasha Jaques</a><img class="affil-logo uw" src="assets/uw_affiliation.png" alt=""></span>
-        <span class="author-block"><a href="https://homes.cs.washington.edu/~vsiyer/" target="_blank" rel="noopener">Vikram Iyer</a><img class="affil-logo uw" src="assets/uw_affiliation.png" alt=""></span>
+        <div class="author-row">
+          <span class="author-block"><a href="https://homes.cs.washington.edu/~zzhihan/" target="_blank" rel="noopener">Zhihan Zhang</a><img class="affil-logo uw" src="assets/uw_affiliation.png" alt=""><span class="equal">*</span></span>
+          <span class="author-block"><a href="https://sandergi.com/" target="_blank" rel="noopener">Alexander Le Metzger</a><img class="affil-logo uw" src="assets/uw_affiliation.png" alt=""><span class="equal">*</span></span>
+          <span class="author-block"><a href="https://www.linkedin.com/in/jiuyang-lyu-92ab28222/" target="_blank" rel="noopener">Jiuyang Lyu</a><img class="affil-logo uw" src="assets/uw_affiliation.png" alt=""><span class="equal">*</span></span>
+          <span class="author-block"><a href="https://www.linkedin.com/in/chuncheng-chang/" target="_blank" rel="noopener">Chun-Cheng Chang</a><img class="affil-logo uw" src="assets/uw_affiliation.png" alt=""></span>
+        </div>
+        <div class="author-row">
+          <span class="author-block"><a href="https://www.linkedin.com/in/jiayishao/" target="_blank" rel="noopener">Jiayi Shao</a><img class="affil-logo uw" src="assets/uw_affiliation.png" alt=""></span>
+          <span class="author-block"><a href="https://scholar.google.com/citations?user=G9aIhu0AAAAJ&amp;hl=en" target="_blank" rel="noopener">Yujia Liu</a><img class="affil-logo ucsd" src="assets/ucsd_affiliation.png" alt=""></span>
+          <span class="author-block"><a href="https://emazuh.github.io/" target="_blank" rel="noopener">Emmanuel Azuh Mensah</a><img class="affil-logo uw" src="assets/uw_affiliation.png" alt=""></span>
+          <span class="author-block"><a href="https://jacobsschool.ucsd.edu/people/profile/edward-wang" target="_blank" rel="noopener">Edward Wang</a><img class="affil-logo ucsd" src="assets/ucsd_affiliation.png" alt=""></span>
+          <span class="author-block"><a href="https://kurti.sh/" target="_blank" rel="noopener">Kurtis Heimerl</a><img class="affil-logo uw" src="assets/uw_affiliation.png" alt=""></span>
+        </div>
+        <div class="author-row">
+          <span class="author-block"><a href="https://coe.northeastern.edu/people/abowd-gregory/" target="_blank" rel="noopener">Gregory D. Abowd</a><img class="affil-logo neu" src="assets/northeastern_affiliation.png" alt=""></span>
+          <span class="author-block"><a href="https://www.cs.washington.edu/people/faculty/shwetak-patel/" target="_blank" rel="noopener">Shwetak Patel</a><img class="affil-logo uw" src="assets/uw_affiliation.png" alt=""></span>
+          <span class="author-block"><a href="https://natashajaques.ai/" target="_blank" rel="noopener">Natasha Jaques</a><img class="affil-logo uw" src="assets/uw_affiliation.png" alt=""></span>
+          <span class="author-block"><a href="https://homes.cs.washington.edu/~vsiyer/" target="_blank" rel="noopener">Vikram Iyer</a><img class="affil-logo uw" src="assets/uw_affiliation.png" alt=""></span>
+        </div>
       </div>
 
       <div class="affiliations" aria-label="Affiliations">
