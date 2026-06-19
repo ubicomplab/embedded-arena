@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="Embedded Arena: Iterative Optimization via Hardware Feedback">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:title" content="Embedded Arena: Iterative Optimization via Hardware Feedback">
+  <meta property="og:description" content="A hardware-in-the-loop benchmark for agentic embedded AI deployment on real microcontrollers.">
+  <meta property="og:image" content="https://ubicomplab.github.io/embedded-arena/assets/teaser.jpg">
+  <meta property="og:url" content="https://ubicomplab.github.io/embedded-arena/">
+  <title>Embedded Arena: Iterative Optimization via Hardware Feedback</title>
+
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+
+  <style>
+    :root {
+      --uw-purple: #4b2e83;
+      --ucsd-blue: #182b49;
+      --neu-red: #c8102e;
+      --ink: #1f2937;
+      --muted: #4b5563;
+      --line: #e5e7eb;
+      --soft: #f8fafc;
+      --blue: #174ea6;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: #ffffff;
+      font-family: "Google Sans", "Noto Sans", Arial, sans-serif;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .hero {
+      padding: 3.5rem 1.25rem 1.25rem;
+    }
+
+    .container {
+      width: min(1120px, calc(100% - 2rem));
+      margin: 0 auto;
+    }
+
+    .has-text-centered {
+      text-align: center;
+    }
+
+    .publication-title {
+      max-width: 1050px;
+      margin: 0 auto 1.25rem;
+      font-size: clamp(2.15rem, 5vw, 4.35rem);
+      line-height: 1.04;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .publication-authors {
+      font-family: "Castoro", Georgia, serif;
+      margin: 0.5rem auto;
+      max-width: 1080px;
+      font-size: clamp(1.2rem, 2.5vw, 1.92rem);
+      line-height: 1.25;
+      color: #000000;
+      font-weight: 700;
+    }
+
+    .author-block {
+      display: inline-block;
+      margin: 0 0.45rem;
+      white-space: nowrap;
+    }
+
+    .author-block a {
+      color: #000000;
+    }
+
+    .affil-mark {
+      display: inline-block;
+      margin-left: 0.05em;
+      font-family: "Google Sans", Arial, sans-serif;
+      font-size: 0.62em;
+      font-weight: 900;
+      line-height: 1;
+      vertical-align: super;
+      letter-spacing: -0.03em;
+    }
+
+    .affil-mark.uw {
+      color: var(--uw-purple);
+      font-family: Georgia, serif;
+      font-size: 0.7em;
+    }
+
+    .affil-mark.ucsd {
+      color: var(--ucsd-blue);
+      font-size: 0.52em;
+      letter-spacing: -0.08em;
+    }
+
+    .affil-mark.neu {
+      color: var(--neu-red);
+      font-family: Georgia, serif;
+      font-size: 0.72em;
+      font-style: italic;
+    }
+
+    .equal {
+      font-size: 0.62em;
+      vertical-align: super;
+      margin-left: 0.05em;
+    }
+
+    .affiliations {
+      margin-top: 1.1rem;
+      font-family: "Castoro", Georgia, serif;
+      color: #000000;
+      font-size: clamp(1rem, 2.15vw, 1.65rem);
+      line-height: 1.35;
+      font-weight: 500;
+    }
+
+    .affiliation-item {
+      display: inline-block;
+      margin: 0.15rem 0.9rem;
+      white-space: nowrap;
+    }
+
+    .affiliation-item .affil-mark {
+      margin-right: 0.05em;
+      margin-left: 0;
+    }
+
+    .publication-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-top: 1.9rem;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      height: 2.65rem;
+      padding: 0 1.2rem;
+      border-radius: 999px;
+      background: #1f2937;
+      color: #ffffff;
+      font-weight: 700;
+      border: 1px solid #111827;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
+      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+    }
+
+    .button:hover {
+      color: #ffffff;
+      background: #111827;
+      text-decoration: none;
+      transform: translateY(-1px);
+      box-shadow: 0 14px 28px rgba(15, 23, 42, 0.18);
+    }
+
+    .section {
+      padding: 2.4rem 1.25rem;
+    }
+
+    .section-title {
+      margin: 0 0 1.2rem;
+      font-size: clamp(1.75rem, 3vw, 2.45rem);
+      line-height: 1.1;
+      text-align: center;
+      font-weight: 800;
+      letter-spacing: -0.015em;
+    }
+
+    .figure-wrap {
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .figure-card {
+      width: min(980px, 100%);
+      margin: 0 auto;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+      overflow: hidden;
+    }
+
+    .figure-card img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .caption {
+      width: min(900px, 100%);
+      margin: 0.85rem auto 0;
+      color: var(--muted);
+      font-size: 0.98rem;
+      text-align: justify;
+    }
+
+    .content {
+      width: min(930px, 100%);
+      margin: 0 auto;
+    }
+
+    .abstract-text {
+      margin: 0;
+      font-size: 1.04rem;
+      line-height: 1.65;
+      text-align: justify;
+    }
+
+    .run-panel {
+      width: min(980px, 100%);
+      margin: 0 auto;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .steps {
+      counter-reset: step;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 0.9rem;
+    }
+
+    .steps li {
+      display: grid;
+      grid-template-columns: 2.2rem 1fr;
+      gap: 0.9rem;
+      align-items: start;
+      padding: 1rem;
+      background: var(--soft);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .steps li::before {
+      counter-increment: step;
+      content: counter(step);
+      width: 2.2rem;
+      height: 2.2rem;
+      border-radius: 50%;
+      display: inline-grid;
+      place-items: center;
+      background: #1f2937;
+      color: #ffffff;
+      font-weight: 800;
+    }
+
+    .steps h3 {
+      margin: 0 0 0.25rem;
+      font-size: 1.05rem;
+    }
+
+    .steps p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    code {
+      padding: 0.12em 0.35em;
+      border-radius: 4px;
+      background: #eef2f7;
+      color: #111827;
+      font-size: 0.92em;
+    }
+
+    pre {
+      margin: 0.7rem 0 0;
+      padding: 0.85rem 1rem;
+      overflow-x: auto;
+      border-radius: 8px;
+      background: #0f172a;
+      color: #e5e7eb;
+      text-align: left;
+      font-size: 0.9rem;
+      line-height: 1.45;
+    }
+
+    pre code {
+      padding: 0;
+      background: transparent;
+      color: inherit;
+    }
+
+    .mini-links {
+      margin-top: 0.65rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .footer {
+      margin-top: 1.5rem;
+      padding: 2rem 1.25rem 2.6rem;
+      background: #fafafa;
+      border-top: 1px solid var(--line);
+      text-align: center;
+      color: var(--muted);
+    }
+
+    @media (max-width: 760px) {
+      .hero {
+        padding-top: 2.4rem;
+      }
+
+      .author-block {
+        white-space: normal;
+      }
+
+      .affiliation-item {
+        display: block;
+      }
+
+      .steps li {
+        grid-template-columns: 1fr;
+      }
+
+      .steps li::before {
+        margin-bottom: 0.2rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <section class="hero">
+    <div class="container has-text-centered">
+      <h1 class="publication-title">Embedded Arena: Iterative Optimization via Hardware Feedback</h1>
+
+      <div class="publication-authors" aria-label="Authors">
+        <span class="author-block">Zhihan Zhang<span class="affil-mark uw">W</span><span class="equal">*</span></span>
+        <span class="author-block">Alexander Le Metzger<span class="affil-mark uw">W</span><span class="equal">*</span></span>
+        <span class="author-block">Jiuyang Lyu<span class="affil-mark uw">W</span><span class="equal">*</span></span>
+        <span class="author-block">Chun-Cheng Chang<span class="affil-mark uw">W</span></span>
+        <br>
+        <span class="author-block">Jiayi Shao<span class="affil-mark uw">W</span></span>
+        <span class="author-block">Yujia Liu<span class="affil-mark ucsd">UCSD</span></span>
+        <span class="author-block">Emmanuel Azuh Mensah<span class="affil-mark uw">W</span></span>
+        <span class="author-block">Edward Wang<span class="affil-mark ucsd">UCSD</span></span>
+        <span class="author-block">Kurtis Heimerl<span class="affil-mark uw">W</span></span>
+        <br>
+        <span class="author-block">Gregory D. Abowd<span class="affil-mark neu">N</span></span>
+        <span class="author-block">Shwetak Patel<span class="affil-mark uw">W</span></span>
+        <span class="author-block">Natasha Jaques<span class="affil-mark uw">W</span></span>
+        <span class="author-block">Vikram Iyer<span class="affil-mark uw">W</span></span>
+      </div>
+
+      <div class="affiliations" aria-label="Affiliations">
+        <span class="affiliation-item"><span class="affil-mark uw">W</span>University of Washington</span>
+        <span class="affiliation-item"><span class="affil-mark ucsd">UCSD</span>University of California San Diego</span>
+        <span class="affiliation-item"><span class="affil-mark neu">N</span>Northeastern University</span>
+        <br>
+        <span class="affiliation-item"><span class="equal">*</span>Equal contribution</span>
+      </div>
+
+      <div class="publication-links" aria-label="Project links">
+        <a class="button" href="https://arxiv.org/abs/2606.16190" target="_blank" rel="noopener">
+          <i class="fa-solid fa-file-lines" aria-hidden="true"></i>
+          <span>Preprint</span>
+        </a>
+        <a class="button" href="https://github.com/ubicomplab/embedded-arena" target="_blank" rel="noopener">
+          <i class="fa-brands fa-github" aria-hidden="true"></i>
+          <span>Code</span>
+        </a>
+        <a class="button" href="#run-benchmark">
+          <i class="fa-solid fa-microchip" aria-hidden="true"></i>
+          <span>Run Benchmark</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="benchmark-summary">
+    <div class="container">
+      <h2 id="benchmark-summary" class="section-title">Benchmark Summary</h2>
+      <div class="figure-wrap">
+        <div class="figure-card">
+          <img src="assets/benchmark_tradeoff.svg" alt="Average HIL deployment success versus token utilization across models and thinking levels">
+        </div>
+        <p class="caption">
+          <strong>Success versus token utilization.</strong>
+          Each point is one model at one thinking level in the HIL compression benchmark, averaged across the MAX78000 vision task and STM32N6 speech-to-IPA task. Points from the same model are connected from low to high thinking. The x-axis is reversed, so the top-right region corresponds to higher deployment success with lower token use.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="abstract">
+    <div class="container">
+      <h2 id="abstract" class="section-title">Abstract</h2>
+      <div class="content">
+        <p class="abstract-text">
+          Embedded devices from wildlife monitoring stations to clinical wearables require local AI inference due to latency, communication, or privacy constraints. Optimizing models for heterogeneous microcontrollers (MCUs) requires simultaneously satisfying hard physical constraints on memory, power, and temperature while preserving accuracy, a multidimensional optimization that is today performed manually by experts. We ask whether an LLM agent can autonomously navigate this complex, multi-turn pipeline guided by real hardware feedback, and introduce a hardware-in-the-loop agent arena in which the agent iteratively refines both model and firmware -- compiling, flashing, and measuring on real hardware -- to enable closed-loop optimization. Frontier models, including Claude Opus 4.7 and Gemini 3.1 Pro, fail entirely without hardware feedback (0% deployment success), whereas our hardware-in-the-loop formulation achieves the first successful deployment within three iterations and can surpass human expert results within seven. This agentic co-optimization achieves 250x compression for vision models with &lt;3.3% accuracy loss and 400x for audio with &lt;6% Feature Error Rate loss, enabling battery-free operation on a commercial MCU via solar harvesting. We demonstrate practical impact in two real-world systems: an elk-detection camera trap (96.7% accuracy) and a phonetic-transcription wearable (8.44% FER) for child development research.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="teaser">
+    <div class="container">
+      <h2 id="teaser" class="section-title">Hardware-in-the-Loop Arena</h2>
+      <div class="figure-wrap">
+        <div class="figure-card">
+          <img src="assets/teaser.jpg" alt="Embedded Arena teaser showing the hardware-in-the-loop benchmark workflow">
+        </div>
+        <p class="caption">
+          <strong>Embedded Arena.</strong>
+          Agents iteratively edit model and firmware artifacts, while the benchmark compiles, flashes, measures, and returns structured physical feedback from real microcontroller hardware.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="run-benchmark" class="section" aria-labelledby="run-title">
+    <div class="container">
+      <h2 id="run-title" class="section-title">Run the Benchmark</h2>
+      <div class="run-panel">
+        <ol class="steps">
+          <li>
+            <div>
+              <h3>Clone and install EmbeddedArena.</h3>
+              <p>Use Python 3.10+ and start Docker before running benchmark jobs.</p>
+              <pre><code>git clone https://github.com/ubicomplab/embedded-arena.git
+cd embedded-arena
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -U pip setuptools wheel
+python -m pip install -e '.[providers,dev]'
+cp .env.example .env</code></pre>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>Add model provider keys.</h3>
+              <p>Edit <code>.env</code> with the providers you plan to evaluate. Scripted smoke tests do not need keys.</p>
+              <pre><code>OPENAI_API_KEY=...
+GOOGLE_API_KEY=...
+ANTHROPIC_API_KEY=...
+set -a; source .env; set +a</code></pre>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>Install assets and target toolchains.</h3>
+              <p>Install only the assets and hardware SDKs needed for the experiments you will run.</p>
+              <pre><code>./scripts/setup_coco_subset.py
+huggingface-cli login
+./scripts/setup_huggingface_assets.sh
+./scripts/setup_max78000.sh
+./scripts/setup_esp32.sh
+./scripts/setup_stm32ai.sh /path/to/x-cube-ai-macarm-v10.2.0.zip</code></pre>
+              <p class="mini-links">
+                See <a href="setup.md">full setup notes</a>, <a href="data-assets.md">data/assets</a>, and <a href="hardware.md">hardware wiring</a>.
+              </p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>Validate the software setup.</h3>
+              <p>The doctor and smoke checks verify Docker, assets, local SDK paths, and software-only synthesis/compile flows.</p>
+              <pre><code>embedded-arena doctor
+python scripts/check_configs.py
+CLI_LLM_SCRIPT=examples/cli_smoke_gradient_flow.jsonl \
+  embedded-arena run configs/smoke/gradient-flow.yaml \
+  --llm cli/scripted --iterations 1 --output-dir outputs/smoke --overwrite</code></pre>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>Run an experiment matrix.</h3>
+              <p>Start with a single task/configuration, then scale to the required model set for contributions.</p>
+              <pre><code>embedded-arena run configs/benchmarks/compression/max78000/hil.yaml \
+  --llm openai/gpt-5.4 \
+  --reasoning high \
+  --iterations 10 \
+  --output-dir outputs/max78000-hil-gpt54</code></pre>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <p>Questions? Please email Zhihan Zhang at z{first name}@cs.washington.edu or Vikram Iyer at vs{last name}@uw.edu</p>
+    </div>
+  </footer>
+</body>
+</html>
