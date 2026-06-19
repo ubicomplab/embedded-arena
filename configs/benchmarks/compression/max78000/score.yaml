@@ -1,0 +1,29 @@
+task:
+  name: "MAX78000 YOLOv11 Segmentation"
+  instructions: |
+    Compress a YOLOv11 segmentation model to run on a MAX78000 microcontroller using the COCO dataset at data.zip. The provided yolo11n-seg.pt checkpoint is a reference/teacher and inspection aid only; do not return it unchanged as model_path because it is not an ai8x/MAX78000 deployable artifact and will not fit or synthesize. Design or distill a much smaller MAX78000-compatible model.
+
+    Hardware constraints to keep in mind from the MAX78000 docs: the CNN accelerator has 64 processors, up to 32 configured layers, 512 KiB accelerator data memory, 432 KiB kernel/weight memory, and 2 KiB bias memory. Activations/data are Q7 8-bit values, and weights must be quantized to supported 1/2/4/8-bit layer formats. Favor small input sizes, few channels, supported conv/pool/eltwise operations, and architecture YAMLs modeled on ai85/MAX78000 examples.
+
+    The file docs/ai8x_exports.md lists the PyTorch module patterns and YAML conventions the harness can convert into an ai8x checkpoint. Any provided reference files are inspection aids only and are invalid final submissions for this compression task. Create your own candidate files under a path such as candidates/attempt_N/.
+
+    Return a PyTorch model definition file as model_path with a matching ai8x architecture YAML as yaml_path. The harness will create the temporary ai8x checkpoint for training/synthesis; do not try to create a .pth.tar yourself. Return one flat final union JSON object. Do not nest by check name. The single model_path value will be used by every check that declares model_path, so it must refer to the same PyTorch model artifact being trained/evaluated and synthesized. Include sample_input_path if you create one, data_path as data.zip, and any training controls such as epochs/train_limit. The test split size is fixed by the harness. Your goal is to maximize the train.py mAP50-95 score while ensuring gradient_flow.py and synthesis_max78000.py both pass. Keep notes and previous versions in sandbox files instead of resubmitting the same failing artifact.
+  iterations: 10
+  trials: 3
+  max_tool_calls: 25
+checks:
+  - name: gradient_flow.py
+    feedback: false
+  - name: train.py
+    feedback: false
+  - name: synthesis_max78000.py
+    feedback: false
+environment:
+  _base_: empty.yaml
+  files:
+    - dst: docs/ai8x_exports.md
+      src: data/documentation/max78000_ai8x_exports.md
+    - dst: yolo11n-seg.pt
+      src: data/models/yolo11n-seg.pt
+    - dst: data.zip
+      src: .data/coco.zip

@@ -1,0 +1,34 @@
+Info : CMSIS-DAP: SWD supported
+Info : CMSIS-DAP: Atomic commands supported
+Info : CMSIS-DAP: Test domain timer supported
+Info : CMSIS-DAP: FW Version = 2.1.0
+Info : CMSIS-DAP: Serial# = 0416170170aacae000000000000000000000000097969906
+Info : CMSIS-DAP: Interface Initialised (SWD)
+Info : SWCLK/TCK = 1 SWDIO/TMS = 1 TDI = 0 TDO = 0 nTRST = 0 nRESET = 1
+Info : CMSIS-DAP: Interface ready
+Info : clock speed 2000 kHz
+Info : SWD DPIDR 0x2ba01477
+Info : [max32xxx.cpu] Cortex-M4 r0p1 processor detected
+Info : [max32xxx.cpu] target has 6 breakpoints, 4 watchpoints
+Info : starting gdb server for max32xxx.cpu on pipe
+Error: [max32xxx.cpu] clearing lockup after double fault
+Polling target max32xxx.cpu failed, trying to reexamine
+Info : [max32xxx.cpu] Cortex-M4 r0p1 processor detected
+Info : [max32xxx.cpu] target has 6 breakpoints, 4 watchpoints
+Info : SWD DPIDR 0x2ba01477
+[max32xxx.cpu] halted due to debug-request, current mode: Thread 
+xPSR: 0x81000000 pc: 0x00002124 msp: 0x20003ff0
+Info : Listening on port 6666 for tcl connections
+Info : Listening on port 4444 for telnet connections
+Info : accepting 'gdb' connection from pipe
+Warn : Prefer GDB command "target extended-remote :pipe" instead of "target remote :pipe"
+Warn : No RTOS could be auto-detected!
+Info : SWD DPIDR 0x2ba01477
+[max32xxx.cpu] halted due to debug-request, current mode: Thread 
+xPSR: 0x81000000 pc: 0x00002124 msp: 0x20003ff0
+Warn : keep_alive() was not invoked in the 1000 ms timelimit. GDB alive packet not sent! (1773 ms). Workaround: increase "set remotetimeout" in GDB
+Info : Padding image section 0 at 0x100530a4 with 12 bytes
+Info : SWD DPIDR 0x2ba01477
+[max32xxx.cpu] halted due to debug-request, current mode: Thread 
+xPSR: 0x81000000 pc: 0x00002124 msp: 0x20003ff0
+Info : dropped 'gdb' connection

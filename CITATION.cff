@@ -1,0 +1,73 @@
+cff-version: 1.2.0
+message: "If you use EmbeddedArena, please cite the arXiv preprint."
+title: "Embedded Arena: Iterative Optimization via Hardware Feedback"
+type: software
+authors:
+  - family-names: Zhang
+    given-names: Zhihan
+  - family-names: Le Metzger
+    given-names: Alexander
+  - family-names: Lyu
+    given-names: Jiuyang
+  - family-names: Chang
+    given-names: Chun-Cheng
+  - family-names: Shao
+    given-names: Jiayi
+  - family-names: Liu
+    given-names: Yujia
+  - family-names: Mensah
+    given-names: Emmanuel Azuh
+  - family-names: Wang
+    given-names: Edward
+  - family-names: Heimerl
+    given-names: Kurtis
+  - family-names: Abowd
+    given-names: Gregory D.
+  - family-names: Patel
+    given-names: Shwetak
+  - family-names: Jaques
+    given-names: Natasha
+  - family-names: Iyer
+    given-names: Vikram
+version: 0.1.0
+date-released: "2026"
+repository-code: "https://github.com/ubicomplab/embedded-arena"
+url: "https://arxiv.org/abs/2606.16190"
+identifiers:
+  - type: other
+    value: "arXiv:2606.16190"
+preferred-citation:
+  type: article
+  title: "Embedded Arena: Iterative Optimization via Hardware Feedback"
+  authors:
+    - family-names: Zhang
+      given-names: Zhihan
+    - family-names: Le Metzger
+      given-names: Alexander
+    - family-names: Lyu
+      given-names: Jiuyang
+    - family-names: Chang
+      given-names: Chun-Cheng
+    - family-names: Shao
+      given-names: Jiayi
+    - family-names: Liu
+      given-names: Yujia
+    - family-names: Mensah
+      given-names: Emmanuel Azuh
+    - family-names: Wang
+      given-names: Edward
+    - family-names: Heimerl
+      given-names: Kurtis
+    - family-names: Abowd
+      given-names: Gregory D.
+    - family-names: Patel
+      given-names: Shwetak
+    - family-names: Jaques
+      given-names: Natasha
+    - family-names: Iyer
+      given-names: Vikram
+  year: 2026
+  url: "https://arxiv.org/abs/2606.16190"
+  identifiers:
+    - type: other
+      value: "arXiv:2606.16190"

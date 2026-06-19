@@ -1,0 +1,27 @@
+task:
+  name: "STM32 Nucleo Wav2Vec2 Speech2IPA Compression"
+  instructions: |
+    Compress the KoelLabs/xlsr-english-01 Wav2Vec2 speech-to-IPA model to run on the NUCLEO-N657X0-Q board. The reference Hugging Face model snapshot is available under reference_model, the SpeechOcean dataset snapshot is available under reference_dataset, and STM32Cube.AI documentation is available under docs/stm32ai. The reference Wav2Vec2 model is a teacher/inspection aid only; do not return it unchanged because it is far too large for a microcontroller deployment.
+
+    The synthesis check targets STM32Cube.AI/STEdgeAI for the configured STM32 target, defaulting to NUCLEO-N657X0-Q / STM32N657X0H3Q. Board budget for this task: the MCU has 0 KB internal Flash, the board provides 512-Mbit Octo-SPI Flash for code/weights, and the STM32N657X0 device has 4.2 MB contiguous SRAM. Generated code, weights, activations, IO buffers, and runtime all compete for those resources. Prefer a tiny audio frontend plus small 1D conv/MLP/GRU-free architecture, aggressive quantization, short fixed input windows, and ONNX or TFLite operators supported by STM32Cube.AI.
+
+    Return one flat final union JSON object. Do not nest by check name. Return a trainable PyTorch model definition as model_path; the harness will export it to a temporary ONNX artifact for STM32Cube.AI synthesis. You may also return an ONNX or TFLite model_path if you are running only the synthesis check, but compression experiments with gradient_flow.py and train.py should use a Python model definition. Use reference_dataset as data_path, include epochs/train_limit as needed, and keep notes and previous versions in sandbox files instead of resubmitting the same failing artifact. The test split size is fixed by the harness. Your goal is to maximize train.py phonetic accuracy rate, defined as 1 - character error rate on IPA strings, while ensuring gradient_flow.py and synthesis_stm32nucleo.py both pass.
+  iterations: 10
+  trials: 3
+  max_tool_calls: 25
+checks:
+  - name: gradient_flow.py
+    feedback: true
+  - name: train.py
+    feedback: true
+  - name: synthesis_stm32nucleo.py
+    feedback: true
+environment:
+  _base_: empty.yaml
+  files:
+    - dst: reference_model
+      src: .data/huggingface/models/KoelLabs/xlsr-english-01
+    - dst: reference_dataset
+      src: .data/huggingface/datasets/KoelLabs/SpeechOcean
+    - dst: docs/stm32ai
+      src: .data/toolchains/stm32ai/x-cube-ai/stedgeai/Documentation

@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "embedded-arena"
+version = "0.1.0"
+description = "Hardware-in-the-loop benchmark for agentic embedded AI deployment."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "UbiComp Lab and EmbeddedArena contributors"}]
+dependencies = [
+  "pydantic>=2.7,<2.12",
+  "PyYAML>=6",
+  "python-dotenv>=1",
+  "requests>=2",
+  "numpy>=1.24",
+  "pyserial>=3.5",
+  "matplotlib>=3.7",
+  "Pillow>=10",
+]
+
+[project.optional-dependencies]
+providers = ["anthropic>=0.40", "google-genai>=1.0", "openai>=1.0"]
+hardware = ["ppk2-api @ git+https://github.com/IRNAS/ppk2-api.git"]
+assets = ["huggingface_hub>=0.23"]
+dev = ["pytest>=8", "ruff>=0.8"]
+
+[project.scripts]
+embedded-arena = "embedded_arena.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["embedded_arena*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"

@@ -1,0 +1,8 @@
+permissions:
+  read_files: true
+  write_files: true
+  code: true
+  network: false
+tools:
+  - "sandbox"
+files: []

@@ -1,0 +1,12 @@
+task:
+  name: "Gradient Flow Smoke Test"
+  instructions: "Create a small valid PyTorch model definition that passes the gradient flow check. Write a Python file named gradient_flow.py in the sandbox. The file must import torch and torch.nn as nn, define class Model(nn.Module) with a no-argument constructor, include at least one trainable layer such as nn.Linear(10, 1), and implement forward(self, x) returning a tensor. After writing the file, run python -m py_compile gradient_flow.py or an equivalent syntax check. Return {\"model_path\":\"gradient_flow.py\"} only after the file has been written and verified."
+  iterations: 1
+  trials: 1
+  max_tool_calls: 8
+checks:
+  - name: gradient_flow.py
+    feedback: true
+environment:
+  _base_: empty.yaml
+  files: []

@@ -1,0 +1,3 @@
+_base_: empty.yaml
+permissions:
+  network: true

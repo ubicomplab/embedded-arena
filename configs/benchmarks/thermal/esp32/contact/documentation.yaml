@@ -1,0 +1,108 @@
+task:
+  name: "ESP32 Firmware Power Optimisation"
+  instructions: |
+    A pre-built ESP32 firmware project (esp32-llm, a TinyLLaMA 260K inference loop) is seeded into the sandbox at firmware/. We use esp32s3. Each iteration (you only have 20 tool calls):
+
+    1. Edit firmware sources under firmware/ using WRITE_FILE / READ_FILE / RUN_COMMAND / WEB_SEARCH to reduce peak temperature of the esp32. YOU ONLY HAVE 20 TOOL CALLS (Write to files take tool calls).
+    You may try different Frequency of MCU and peripheral clocks, toggle different reg settings for peripheral on/off or mode change, and use parallel execution or different code patterns. Common levers: peripheral power gating, CPU frequency scaling, tokeniser/model pruning.
+
+    Make firmware explicitly print out stages and inference results over UART, which the harness captures and uses for judge evaluation. Firmware must print the exact checkpoint string "firmware task complete checkpoint" when the task is done and wait 100ms after flush.
+
+    REQUIRED FIRMWARE BEHAVIOR CONTRACT (must be preserved -- the LLM judge reads main.c from your sandbox firmware/ to verify these, and assigns score = -1 if the firmware cheats by skipping/faking any of them):
+
+    a. Boot, then BLOCK on a USB-Serial-JTAG read until the host sends one start byte. Print a "READY" message before the read so the host knows it can send the byte. This start-byte handshake is what the measurement harness uses to mark t=0; do not bypass it.
+
+    b. After the start byte is received, bring up WiFi as a SoftAP (SSID/PASS configured in firmware) and open a UDP broadcast socket. The token emit hook must fan-out each generated token to NUM_CLIENTS=80 broadcast destinations (one sendto per client per token). Do not lower NUM_CLIENTS or skip the fan-out.
+
+    c. Run TinyLLaMA inference for the 2 prompt defined in kPrompts[] (NUM_PROMPTS=2), at least once each per pass (max and min token should both be set to 150). Token pieces must be streamed over UDP via the emit hook as they are produced -- do not pre-compute, cache, or shortcut the inference loop to fake completion. Additionally, after each generate(...) call, the firmware must print exactly one line in the format: [temp] max during run: XX.XXC
+
+    d. Temperature Sampling & Buffering: You must maintain a 200Hz continuous temperature sampling task using the ESP-IDF internal temperature sensor API (temperature_sensor_*). These samples must be stored in a allocated 256 KiB PSRAM buffer. Stop sensing when last inference compeletes.
+
+    e. Temperature Data Streaming: The buffered temperature samples must be streamed out over UDP (with the same fan-out to 80 logical clients as the tokens). While you are not strictly required to stream this every 10 seconds, all buffered data must be successfully drained/flushed over UDP before the program finishes.
+
+    f. Shutdown Sequence & Checkpoint: After all prompts complete, you must execute a strict shutdown sequence: flush any remaining temperature samples over UDP, explicitly clear the sample count to zero, zero out and free the PSRAM buffer, and leave the temp buffer empty. You must explicitly print that the buffer is drained over UART. Only after this is printed, print "firmware task complete checkpoint" exactly once over UART, flush, then idle.
+
+    g. The whole task should be finished in 1 minute (measurement period) once the start byte is sent, otherwise the firmware checkpoint will be cut and score = -1. No need to prove it will be done in 1 min by printing though.
+
+    h. The wifi transmit power must be set to the maximum. (esp_wifi_set_max_tx_power(84)).
+
+    You ARE allowed to change: CPU/APB clock frequency, WiFi TX power, beacon interval, light-sleep / power-gating between inferences, memory placement (PSRAM vs IRAM), task pinning, MIN_TOKENS / MAX_TOKENS bounds, sampler temperature, inter-prompt delay, and any implementation detail that does not violate (a)-(f) above.
+
+    NOTE: Do NOT manually run idf.py build or idf.py flash commands. The harness will automatically compile (compile_esp32 check) and flash (flash_esp32 check) your firmware changes.
+
+    2. Your firmware MUST print the following exact string over UART at least once when it believes it has completed its task consistently (e.g., after the buffer is drained and successfully freed):
+
+    firmware task complete checkpoint.
+
+    and wait for 100 ms to ensure the uart captures the output.
+
+    Without this string in the UART output the harness will immediately assign score = -1 without invoking the LLM judge.
+
+    3. Return one flat final JSON object. Required keys: project_dir, firmware_behavior_description. Example:
+    {
+      "project_dir": "firmware",
+      "firmware_behavior_description": "running TinyLLaMA inference loop, printing generated tokens to serial, buffering and streaming 200Hz temp data, and draining PSRAM at shutdown"
+    }
+
+    firmware_behavior_description is passed to an LLM judge that reads the UART output and verifies the firmware is doing what you claim. Score = -1 if the checkpoint is missing OR the judge finds misbehavior; otherwise score is in [0.0, 1.0] based on measured avg_temp_c.
+
+    Feedback per iteration (when feedback is enabled):
+    - Compile and flash logs (shown on failure)
+    - Hardware Status -- detected ports and capture configuration
+    - Measurement Results -- avg_temp_c (C), peak_temp_c (C)
+    - Firmware Behavior -- checkpoint FOUND/NOT FOUND, judge PASS/FAIL + reason
+    - UART Serial Output -- raw UART text captured during the measurement window
+
+    You should focus on optimizing the target metric and keep trying optimization while maintaining the required functionality. YOU ONLY HAVE 10 ITERATIONS FOR OPTIMIZATION (10 compile flash and run), try making each iteration's firmware work. YOU ONLY HAVE 20 TOOL CALLS PER ITERATION. Plan your optimization strategy carefully (like reverse bad idea while add new feature) to make the most of each tool call, especially multiple WRITE_FILE might be needed for firmware changes. Don't put MCU to sleep.
+    Again, YOU ONLY HAVE 20 TOOL CALLS PER ITERATION (per compile-flash-run) and file write do use tool calls. Make most of tool calls and try to not exhausted them without making working firmware that can finish the task in 1 min and print checkpoint.
+  iterations: 10
+  trials: 1
+  max_tool_calls: 20
+
+checks:
+  - name: compile_esp32.py
+    description: |
+      ESP-IDF build for project_dir (CMakeLists.txt + idf.py build + ELF in build/).
+      Verbose logs only on failure.
+    feedback: true
+
+  - name: flash_esp32.py
+    depends_on:
+      - compile_esp32.py
+    description: |
+      idf.py flash after compile; needs build/flasher_args.json. Port from ESP32_PORT / YAML params.
+
+    feedback: true
+    params:
+      capture_power: false
+
+  - name: measure_esp32.py
+    depends_on:
+      - flash_esp32.py
+    description: |
+      UART + IR capture for duration_ms; checkpoint string required else score -1;
+      else LLM judge vs task_description + firmware_behavior_description; metric
+      from YAML (e.g. peak_temp_c). Feedback includes temps, judge summary, UART window.
+    feedback: false
+    params:
+      capture_power: false
+      capture_serial: true
+      capture_thermal: true
+      ir_rate_hz: 32.0
+      duration_ms: 60000
+      optimization_metric: peak_temp_c
+      metric_min: 20.0
+      metric_max: 65.0
+      lower_is_better: true
+      show_ir_viewer: true
+      task_description: >
+        Firmware running and metric measurement.
+
+
+environment:
+  _base_: network.yaml
+  files:
+    - dst: firmware
+      src: firmware/esp32/tinyllama
+    - dst: ESP32_example_code
+      src: data/documentation/ESP32_example_code

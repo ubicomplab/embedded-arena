@@ -1,0 +1,20 @@
+task:
+  name: "STM32 Speech PAR Train/Synthesis Smoke Test"
+  instructions: "A tiny SpeechOcean-compatible PyTorch model and the SpeechOcean dataset are already in the sandbox. Return exactly this flat JSON object and no other text: {\"model_path\":\"models/stm32_speech_smoke_model.py\",\"data_path\":\"reference_dataset\",\"epochs\":10,\"train_limit\":64}"
+  iterations: 1
+  trials: 1
+  max_tool_calls: 1
+checks:
+  - name: gradient_flow.py
+    feedback: true
+  - name: train.py
+    feedback: true
+  - name: synthesis_stm32nucleo.py
+    feedback: true
+environment:
+  _base_: empty.yaml
+  files:
+    - dst: models/stm32_speech_smoke_model.py
+      src: data/check_fixtures/stm32_speech_smoke_model.py
+    - dst: reference_dataset
+      src: .data/huggingface/datasets/KoelLabs/SpeechOcean

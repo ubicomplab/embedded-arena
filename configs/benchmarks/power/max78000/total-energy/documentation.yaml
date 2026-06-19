@@ -1,0 +1,158 @@
+task:
+  name: "MAX78000 Firmware Power/Thermal Optimisation"
+  instructions: |
+    A pre-built MAX78000 firmware project (yolo-pico seed firmware) is seeded into
+    the sandbox at firmware/. Each iteration (you only have 20 tool calls):
+
+      1. Edit firmware sources under firmware/ using WRITE_FILE / READ_FILE /
+         RUN_COMMAND / WEB_SEARCH to lower total inference energy and without breaking
+         functionality (do 5 face detection inference cycles with 2s intervals). YOU ONLY HAVE 20 TOOL CALLS (Write to files take tool calls). You may try different Frequency
+         of MCU and peripheral clocks, toggle different reg settings for peripheral
+         on/off or mode change or sleep, and use parallel execution or different code patterns.
+         You can search online or in the provided MAX78000_example_code for power optimization techniques and examples.
+         You can also do step by step test to search for optimized parameters like frequency, sleep duration, etc.
+         Common levers: input image down-sampling cadence, sleep
+         between inferences, peripheral clock gating, weight/activation tweaks.
+
+         Make firmware to explicitly print out stages and inference (with timestamp as header) results over UART,
+         which the harness captures and uses for judge evaluation.
+
+         Make firmware to do 5 inference cycles then sleep.
+
+         DO NOT bypass the physical camera sensor hardware. The firmware must initialize the GC0308
+         (or equivalent) sensor and capture live pixel data into the CNN FIFO for every inference cycle.
+
+         DO NOT use synthetic or "dummy" input data. Loading pre-defined arrays or hardcoded patterns
+         into the CNN is strictly prohibited and will result in a score of -1.
+
+         DO NOT short-circuit post-processing. The firmware must execute the full logic required to interpret
+         CNN output (e.g., SSD/NMS/Confidence checks). Bypassing these calculations to hardcode a "face detected"
+         or "no face" result is considered misbehavior.
+
+         NOTE: Do NOT manually run `make` or flash commands. The harness will
+         automatically compile (compile_max78000 check), erase, and flash
+         (flash_max78000 check) your firmware changes.
+         NOTE: DO NOT REMOVE INITIAL 2s delay in firmware.
+
+        For output, and firmware behavior, face detection cnn is the same as yolo pico, print yolo inference (face detection) complete upon one inference compelete.
+        Make firmware explicitly print out stages like begin inference, end inference, sleep, etc. with timestamp as header over UART, which the harness captures and uses for judge evaluation.
+        DO NOT TRY TO MODIFY CAMERA DRIVER, THE PRINT MESSAGE FROM CAMERA DRIVER CANNOT BE AVOIDED.
+
+      2. Optionally create data_processor.py at the sandbox root with a
+         function `current_processor(currents: np.ndarray) -> Any`.
+         The unified firmware check loads this file, calls the function on the
+         raw 100 kHz µA array, and includes the return value in feedback under
+         "## Agent Function". Use it for custom statistics such as per-cycle
+         energy or duty-cycle ratio.
+
+      3. Your firmware MUST print the following exact string over UART at least
+         once when it believes it has completed its task consistently (e.g. after all successful inference cycles):
+
+           firmware task complete checkpoint
+
+        and wait for 100 ms to ensure the uart captures the output.
+
+         Without this string in the UART output the harness will immediately
+         assign score = -1 without invoking the LLM judge.
+
+      4. Return one flat final JSON object. Required keys: project_dir,
+         project_name, firmware_behavior_description. Example:
+           {
+             "project_dir": "firmware",
+             "project_name": "yolo-pico_llm",
+             "firmware_behavior_description": "running YOLO inference at ~4 fps, printing confidence scores to UART"
+           }
+
+         firmware_behavior_description is passed to an LLM judge that reads
+         the UART output and verifies the firmware is doing what you claim.
+         Score = -1 if the checkpoint is missing OR the judge finds misbehavior;
+         otherwise score is in [0.0, 1.0] based on measured total_energy_j.
+
+
+    Measurement window and modality flags are set by the YAML config and
+    cannot be changed by the agent.
+
+    You should focus on optimize target metric and keep trying optimization while maintaining the required functionality.
+
+  iterations: 10
+  trials: 1
+  max_tool_calls: 20
+
+checks:
+  - name: compile_max78000.py
+    description: |
+      Binary check — passes only when all of the following succeed:
+        1. project_dir exists in the sandbox and contains a Makefile
+        2. `make` exits successfully (uses arm-none-eabi-gcc + Maxim SDK)
+        3. <project_dir>/build/<project_name>.elf is present and non-empty
+      Full build output is shown in feedback only on failure. Required fields:
+      project_dir and project_name.
+    feedback: true
+    params:
+      target: MAX78000
+      board: CAM02_RevA
+      jobs: 8
+
+  - name: flash_max78000.py
+    depends_on:
+      - compile_max78000.py
+    description: |
+      Binary check — enables PPK2 voltage (3.3 V) to power the MAX78000, mass-erases
+      the flash, then programs the ELF over JTAG/SWD using arm-none-eabi-gdb + OpenOCD.
+      Expects the ELF at <project_dir>/build/<project_name>.elf (built by compile_max78000).
+      Passes only when both erase and flash report success. Full output is shown in
+      feedback only on failure.
+    feedback: true
+    params:
+      capture_power: true
+      target_voltage_v: 3.3
+
+  - name: measure_max78000.py
+    depends_on:
+      - flash_max78000.py
+    description: |
+      Measurement check — powers the MAX78000 at 3.3 V through a Nordic PPK2
+      source meter and records current at 100 kHz for duration_ms milliseconds,
+      while optionally recording IR thermal frames from the MLX90640 camera.
+      Firmware must already be flashed by flash_max78000 before this check runs.
+      Scoring (two-stage):
+        1. Hardcoded checkpoint: UART output must contain the exact string
+           "firmware task complete checkpoint" (case-insensitive).
+           If missing → score = -1.0 immediately.
+        2. LLM judge: evaluates UART output against task_description and
+           firmware_behavior_description. If judge fails → score = -1.0.
+        3. Metric score: normalized optimization_metric in [0.0, 1.0].
+      When feedback is enabled the agent receives:
+        • Measured values: total_energy_j (J), peak_uA (µA), avg_uA (µA)
+          (when capture_power=true)
+        • Thermal values: peak_temp_c (°C), avg_temp_c (°C)
+          (when capture_thermal=true)
+        • Firmware behavior: checkpoint FOUND/NOT FOUND, judge PASS/FAIL + reason
+        • UART serial output (always, as hardware evidence)
+      All modality flags, timing, and scoring params are YAML-controlled.
+    feedback: false
+    params:
+      capture_power: true
+      target_voltage_v: 3.3
+      capture_serial: true
+      capture_thermal: false
+      ir_rate_hz: 4.0
+      duration_ms: 20000
+      optimization_metric: total_energy_j
+      metric_min: 0.001
+      metric_max: 10
+      lower_is_better: true
+      show_ir_viewer: true
+      task_description: >
+        MAX78000 Firmware Power/Thermal Optimisation — minimize per-cycle
+        inference energy and peak chip temperature. The firmware should be
+        running YOLO-based inference continuously, printing inference results
+        to UART, with duty-cycle sleep or clock gating between cycles.
+
+environment:
+  _base_: network.yaml
+  files:
+    - dst: firmware
+      src: firmware/max78000/yolo-pico
+    - dst: MAX78000_example_code
+      src: data/documentation/MAX78000_example_code

@@ -1,0 +1,14 @@
+task:
+  name: "STM32 Nucleo Synthesis Smoke Test"
+  instructions: "A known-good ONNX model is already in the sandbox. Return exactly this flat JSON object and no other text: {\"model_path\":\"models/sigmoid.onnx\"}"
+  iterations: 1
+  trials: 1
+  max_tool_calls: 1
+checks:
+  - name: synthesis_stm32nucleo.py
+    feedback: true
+environment:
+  _base_: empty.yaml
+  files:
+    - src: .data/toolchains/stm32ai/x-cube-ai/stedgeai/Utilities/macarm/lib/python3.9/site-packages/onnxruntime/datasets/sigmoid.onnx
+      dst: models/sigmoid.onnx

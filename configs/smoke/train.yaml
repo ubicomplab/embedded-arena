@@ -1,0 +1,16 @@
+task:
+  name: "Train Check Smoke Test"
+  instructions: "A tiny COCO-style dataset and a trainable PyTorch model are already in the sandbox. Return exactly this flat JSON object and no other text: {\"model_path\":\"models/train_smoke_model.py\",\"data_path\":\"data.zip\",\"epochs\":2,\"train_limit\":16}"
+  iterations: 1
+  trials: 1
+  max_tool_calls: 1
+checks:
+  - name: train.py
+    feedback: true
+environment:
+  _base_: empty.yaml
+  files:
+    - src: data/check_fixtures/train_smoke_model.py
+      dst: models/train_smoke_model.py
+    - src: data/check_fixtures/train_smoke_coco.zip
+      dst: data.zip
