@@ -66,13 +66,25 @@ For every new hardware setup, document:
 - Bill of materials.
 - Wiring diagram or photo.
 - Required host toolchains with official links.
-- Setup script or manual installation steps.
+- Setup script for every non-committed asset or manual vendor installation steps when redistribution is prohibited.
 - Smoke test or bring-up command.
 - Expected ports/environment variables.
 - Recovery procedure after a bad flash or sleep-state bug.
 - What data is collected and where it is written.
 
 Photos from the paper-style setup are welcome in `docs/assets/` when they make wiring clearer.
+
+## Asset Setup Scripts
+
+If your benchmark needs large datasets, model snapshots, vendor archives, calibration corpora, or generated fixtures that are not committed to git, add a setup script under `scripts/`. The script must create the exact paths used by your YAML configs, must not contain absolute paths from your workstation, and should be safe to rerun.
+
+Good examples in the current repo:
+
+- `scripts/setup_coco_subset.py` builds `.data/coco.zip` from native COCO/Ultralytics sources.
+- `scripts/setup_huggingface_assets.sh` downloads `KoelLabs/xlsr-english-01` and `KoelLabs/SpeechOcean`, which natively live on Hugging Face.
+- `scripts/setup_stm32ai.sh` installs from a user-downloaded ST vendor zip whose license prevents redistribution.
+
+Do not rehost third-party assets solely to simplify setup. Prefer reproducible setup scripts that fetch from the native source or clearly instruct the user where to download manually.
 
 ## Baseline Runs
 

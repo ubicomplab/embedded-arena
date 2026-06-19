@@ -182,6 +182,16 @@ set -a; source .env; set +a
 
 See [Data/assets](data-assets.md) for the expected local layout.
 
+## COCO Subset Asset
+
+The MAX78000 compression benchmark needs `.data/coco.zip`. Build it from native COCO/Ultralytics sources with:
+
+```bash
+./scripts/setup_coco_subset.py
+```
+
+Use `--train-count`, `--val-count`, and `--test-count` for a smaller local subset while testing the pipeline.
+
 ## Optional Remote Training
 
 Training checks can offload candidate training to a remote GPU host while the agent and sandbox run locally. Configure these `.env` keys:
