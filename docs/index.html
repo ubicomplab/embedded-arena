@@ -297,6 +297,10 @@
       border-radius: 8px;
     }
 
+    .steps li > div {
+      min-width: 0;
+    }
+
     .steps li::before {
       counter-increment: step;
       content: counter(step);
@@ -331,6 +335,9 @@
     pre {
       margin: 0.7rem 0 0;
       padding: 0.85rem 1rem;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
       overflow-x: auto;
       border-radius: 8px;
       background: #0f172a;
@@ -341,6 +348,8 @@
     }
 
     pre code {
+      display: block;
+      min-width: 0;
       padding: 0;
       background: transparent;
       color: inherit;
@@ -361,7 +370,7 @@
       color: var(--muted);
     }
 
-    @media (max-width: 760px) {
+    @media (max-width: 900px) {
       .hero {
         padding-top: 2.4rem;
       }
@@ -389,10 +398,23 @@
 
       .steps li {
         grid-template-columns: 1fr;
+        padding: 0.85rem;
       }
 
       .steps li::before {
         margin-bottom: 0.2rem;
+      }
+
+      pre {
+        padding: 0.75rem;
+        font-size: 0.78rem;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+      }
+
+      pre code {
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
       }
     }
   </style>
