@@ -12,9 +12,7 @@
 
 EmbeddedArena is a public benchmark for agentic embedded AI deployment. Agents iteratively edit model or firmware artifacts; the framework compiles, flashes, and validates those artifacts; and the score comes from real hardware measurements such as deployability, current, energy, and temperature.
 
-<p align="center">
-  <img src="docs/assets/teaser.jpg" alt="EmbeddedArena overview" width="760">
-</p>
+![EmbeddedArena overview](/docs/assets/teaser.jpg)
 
 ## Quickstart
 

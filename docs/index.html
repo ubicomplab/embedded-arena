@@ -1,520 +1,302 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="description" content="Embedded Arena: Iterative Optimization via Hardware Feedback">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta property="og:title" content="Embedded Arena: Iterative Optimization via Hardware Feedback">
-  <meta property="og:description" content="A hardware-in-the-loop benchmark for agentic embedded AI deployment on real microcontrollers.">
+  <meta property="og:description"
+    content="A hardware-in-the-loop benchmark for agentic embedded AI deployment on real microcontrollers.">
   <meta property="og:image" content="https://ubicomplab.github.io/embedded-arena/assets/teaser.jpg">
   <meta property="og:url" content="https://ubicomplab.github.io/embedded-arena/">
   <title>Embedded Arena: Iterative Optimization via Hardware Feedback</title>
 
   <link rel="icon" type="image/png" href="assets/logo.png">
+
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
-
-  <style>
-    :root {
-      --uw-purple: #4b2e83;
-      --ucsd-blue: #182b49;
-      --neu-red: #c8102e;
-      --ink: #1f2937;
-      --muted: #4b5563;
-      --line: #e5e7eb;
-      --soft: #f8fafc;
-      --blue: #174ea6;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      margin: 0;
-      color: var(--ink);
-      background: #ffffff;
-      font-family: "Google Sans", "Noto Sans", Arial, sans-serif;
-      line-height: 1.5;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    a {
-      color: var(--blue);
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-
-    .hero {
-      padding: 3.5rem 1.25rem 1.25rem;
-    }
-
-    .hero .container {
-      width: min(1320px, calc(100% - 2rem));
-    }
-
-    .container {
-      width: min(1120px, calc(100% - 2rem));
-      margin: 0 auto;
-    }
-
-    .has-text-centered {
-      text-align: center;
-    }
-
-    .publication-title {
-      max-width: 1260px;
-      margin: 0 auto 1.25rem;
-      font-size: clamp(2rem, 3.15vw, 2.78rem);
-      line-height: 1.08;
-      font-weight: 700;
-      letter-spacing: -0.025em;
-      white-space: nowrap;
-    }
-
-    .publication-authors {
-      font-family: "Castoro", Georgia, serif;
-      margin: 0.5rem auto;
-      max-width: 1280px;
-      font-size: clamp(1.05rem, 1.85vw, 1.55rem);
-      line-height: 1.35;
-      color: #000000;
-      font-weight: 400;
-    }
-
-    .author-row {
-      display: flex;
-      justify-content: center;
-      align-items: baseline;
-      gap: 0.9rem 1.25rem;
-      flex-wrap: nowrap;
-    }
-
-    .author-row + .author-row {
-      margin-top: 0.18rem;
-    }
-
-    .author-block {
-      display: inline-flex;
-      align-items: baseline;
-      margin: 0;
-      white-space: nowrap;
-    }
-
-    .author-block a {
-      color: var(--blue);
-    }
-
-    .author-block a:hover {
-      text-decoration: underline;
-    }
-
-    .affil-logo {
-      display: inline-block;
-      margin-left: 0.08em;
-      vertical-align: super;
-      object-fit: contain;
-    }
-
-    .author-block .affil-logo.uw {
-      width: auto;
-      height: 0.44em;
-      transform: translateY(-0.08em);
-    }
-
-    .author-block .affil-logo.ucsd {
-      width: auto;
-      height: 0.44em;
-      transform: translateY(-0.04em);
-    }
-
-    .author-block .affil-logo.neu {
-      width: auto;
-      height: 0.44em;
-      transform: translateY(-0.04em);
-    }
-
-    .equal {
-      font-size: 0.55em;
-      vertical-align: super;
-      margin-left: 0.05em;
-    }
-
-    .affiliations {
-      margin-top: 1.05rem;
-      font-family: "Castoro", Georgia, serif;
-      color: #000000;
-      font-size: clamp(0.96rem, 1.55vw, 1.28rem);
-      line-height: 1.35;
-      font-weight: 500;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 1.35rem;
-      flex-wrap: nowrap;
-    }
-
-    .affiliation-item {
-      display: inline-flex;
-      align-items: center;
-      margin: 0;
-      white-space: nowrap;
-    }
-
-    .affiliation-item .affil-logo {
-      margin-right: 0.18em;
-      margin-left: 0;
-      vertical-align: baseline;
-    }
-
-    .affiliation-item .affil-logo.uw {
-      width: 0.72em;
-      height: auto;
-    }
-
-    .affiliation-item .affil-logo.ucsd,
-    .affiliation-item .affil-logo.neu {
-      width: 0.56em;
-      height: auto;
-    }
-
-    .publication-links {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.75rem;
-      margin-top: 1.9rem;
-    }
-
-    .button {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.55rem;
-      height: 2.65rem;
-      padding: 0 1.2rem;
-      border-radius: 999px;
-      background: #1f2937;
-      color: #ffffff;
-      font-weight: 700;
-      border: 1px solid #111827;
-      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
-      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
-    }
-
-    .button:hover {
-      color: #ffffff;
-      background: #111827;
-      text-decoration: none;
-      transform: translateY(-1px);
-      box-shadow: 0 14px 28px rgba(15, 23, 42, 0.18);
-    }
-
-    .section {
-      padding: 2.4rem 1.25rem;
-    }
-
-    .section-title {
-      margin: 0 0 1.2rem;
-      font-size: clamp(1.75rem, 3vw, 2.45rem);
-      line-height: 1.1;
-      text-align: center;
-      font-weight: 800;
-      letter-spacing: -0.015em;
-    }
-
-    .figure-wrap {
-      margin: 0 auto;
-      text-align: center;
-    }
-
-    .figure-card {
-      width: min(980px, 100%);
-      margin: 0 auto;
-      border-radius: 10px;
-      border: 1px solid var(--line);
-      background: #ffffff;
-      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
-      overflow: hidden;
-    }
-
-    .figure-card img {
-      display: block;
-      width: 100%;
-      height: auto;
-    }
-
-    .caption {
-      width: min(900px, 100%);
-      margin: 0.85rem auto 0;
-      color: var(--muted);
-      font-size: 0.98rem;
-      text-align: justify;
-    }
-
-    .content {
-      width: min(930px, 100%);
-      margin: 0 auto;
-    }
-
-    .abstract-text {
-      margin: 0;
-      font-size: 1.04rem;
-      line-height: 1.65;
-      text-align: justify;
-    }
-
-    .run-panel {
-      width: min(980px, 100%);
-      margin: 0 auto;
-      display: grid;
-      gap: 1rem;
-    }
-
-    .steps {
-      counter-reset: step;
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: grid;
-      gap: 0.9rem;
-    }
-
-    .steps li {
-      display: grid;
-      grid-template-columns: 2.2rem 1fr;
-      gap: 0.9rem;
-      align-items: start;
-      padding: 1rem;
-      background: var(--soft);
-      border: 1px solid var(--line);
-      border-radius: 8px;
-    }
-
-    .steps li > div {
-      min-width: 0;
-    }
-
-    .steps li::before {
-      counter-increment: step;
-      content: counter(step);
-      width: 2.2rem;
-      height: 2.2rem;
-      border-radius: 50%;
-      display: inline-grid;
-      place-items: center;
-      background: #1f2937;
-      color: #ffffff;
-      font-weight: 800;
-    }
-
-    .steps h3 {
-      margin: 0 0 0.25rem;
-      font-size: 1.05rem;
-    }
-
-    .steps p {
-      margin: 0;
-      color: var(--muted);
-    }
-
-    code {
-      padding: 0.12em 0.35em;
-      border-radius: 4px;
-      background: #eef2f7;
-      color: #111827;
-      font-size: 0.92em;
-    }
-
-    pre {
-      margin: 0.7rem 0 0;
-      padding: 0.85rem 1rem;
-      width: 100%;
-      max-width: 100%;
-      min-width: 0;
-      overflow-x: auto;
-      border-radius: 8px;
-      background: #0f172a;
-      color: #e5e7eb;
-      text-align: left;
-      font-size: 0.9rem;
-      line-height: 1.45;
-    }
-
-    pre code {
-      display: block;
-      min-width: 0;
-      padding: 0;
-      background: transparent;
-      color: inherit;
-    }
-
-    .mini-links {
-      margin-top: 0.65rem;
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-
-    .footer {
-      margin-top: 1.5rem;
-      padding: 2rem 1.25rem 2.6rem;
-      background: #fafafa;
-      border-top: 1px solid var(--line);
-      text-align: center;
-      color: var(--muted);
-    }
-
-    @media (max-width: 900px) {
-      .hero {
-        padding-top: 2.4rem;
-      }
-
-      .author-block {
-        white-space: normal;
-      }
-
-      .author-row {
-        flex-wrap: wrap;
-      }
-
-      .publication-title {
-        white-space: normal;
-      }
-
-      .affiliations {
-        flex-wrap: wrap;
-        gap: 0.35rem 1rem;
-      }
-
-      .affiliation-item {
-        display: block;
-      }
-
-      .steps li {
-        grid-template-columns: 1fr;
-        padding: 0.85rem;
-      }
-
-      .steps li::before {
-        margin-bottom: 0.2rem;
-      }
-
-      pre {
-        padding: 0.75rem;
-        font-size: 0.78rem;
-        white-space: pre-wrap;
-        overflow-wrap: anywhere;
-      }
-
-      pre code {
-        white-space: pre-wrap;
-        overflow-wrap: anywhere;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="./static/css/index.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
 </head>
 
 <body>
+
   <section class="hero">
-    <div class="container has-text-centered">
-      <h1 class="publication-title">Embedded Arena: Iterative Optimization via Hardware Feedback</h1>
+    <div class="hero-body">
+      <div class="container is-fullhd">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h2 class="subtitle is-2 publication-title">Embedded Arena: Iterative Optimization via Hardware Feedback
+            </h2>
+            <div class="is-size-5 publication-authors">
+              <!-- <h3 class="title is-4 conference-authors"><span style="color: #A50E0E">Nature Electronics 2026</span></a></h3> -->
+              <span class="author-block">
+                <a target="_blank" href="https://homes.cs.washington.edu/~zzhihan/">Zhihan
+                  Zhang<sup></sup></a><sup>1*</sup>,
+              </span>
+              <span class="author-block">
+                <a target="_blank" href="https://sandergi.com/">Alexander Le Metzger</a><sup>1*</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://www.linkedin.com/in/jiuyang-lyu-92ab28222/" target="_blank" rel="noopener">Jiuyang
+                  Lyu</a><sup>1*</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://www.linkedin.com/in/chuncheng-chang/" target="_blank" rel="noopener">Chun-Cheng
+                  Chang</a><sup>1</sup>,
+              </span>
+              <br>
+              <span class="author-block">
+                <a href="https://www.linkedin.com/in/jiayishao/" target="_blank" rel="noopener">Jiayi
+                  Shao</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://nancylyj.github.io/" target="_blank" rel="noopener">Yujia Liu</a><sup>2</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://emazuh.github.io/" target="_blank" rel="noopener">Emmanuel Azuh Mensah</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://jacobsschool.ucsd.edu/people/profile/edward-wang" target="_blank" rel="noopener">Edward
+                  Wang</a><sup>2</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://kurti.sh/" target="_blank" rel="noopener">Kurtis Heimerl</a><sup>1</sup>,
+              </span>
+              <br>
+              <span class="author-block">
+                <a target="_blank" href="https://coe.northeastern.edu/people/abowd-gregory/">Gregory D.
+                  Abowd</a><sup>3</sup>,
+              </span>
+              <span class="author-block">
+                <a target="_blank" href="https://www.cs.washington.edu/people/faculty/shwetak-patel/">Shwetak
+                  Patel</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                <a target="_blank" href="https://natashajaques.ai/">Natasha Jaques</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                <a target="_blank" href="https://homes.cs.washington.edu/~vsiyer/">Vikram
+                  Iyer<sup></sup></a><sup>1</sup>
+              </span>
+            </div>
 
-      <div class="publication-authors" aria-label="Authors">
-        <div class="author-row">
-          <span class="author-block"><a href="https://homes.cs.washington.edu/~zzhihan/" target="_blank" rel="noopener">Zhihan Zhang</a><img class="affil-logo uw" src="assets/uw_affiliation.png" alt=""><span class="equal">*</span></span>
-          <span class="author-block"><a href="https://sandergi.com/" target="_blank" rel="noopener">Alexander Le Metzger</a><img class="affil-logo uw" src="assets/uw_affiliation.png" alt=""><span class="equal">*</span></span>
-          <span class="author-block"><a href="https://www.linkedin.com/in/jiuyang-lyu-92ab28222/" target="_blank" rel="noopener">Jiuyang Lyu</a><img class="affil-logo uw" src="assets/uw_affiliation.png" alt=""><span class="equal">*</span></span>
-          <span class="author-block"><a href="https://www.linkedin.com/in/chuncheng-chang/" target="_blank" rel="noopener">Chun-Cheng Chang</a><img class="affil-logo uw" src="assets/uw_affiliation.png" alt=""></span>
-        </div>
-        <div class="author-row">
-          <span class="author-block"><a href="https://www.linkedin.com/in/jiayishao/" target="_blank" rel="noopener">Jiayi Shao</a><img class="affil-logo uw" src="assets/uw_affiliation.png" alt=""></span>
-          <span class="author-block"><a href="https://scholar.google.com/citations?user=G9aIhu0AAAAJ&amp;hl=en" target="_blank" rel="noopener">Yujia Liu</a><img class="affil-logo ucsd" src="assets/ucsd_affiliation.png" alt=""></span>
-          <span class="author-block"><a href="https://emazuh.github.io/" target="_blank" rel="noopener">Emmanuel Azuh Mensah</a><img class="affil-logo uw" src="assets/uw_affiliation.png" alt=""></span>
-          <span class="author-block"><a href="https://jacobsschool.ucsd.edu/people/profile/edward-wang" target="_blank" rel="noopener">Edward Wang</a><img class="affil-logo ucsd" src="assets/ucsd_affiliation.png" alt=""></span>
-          <span class="author-block"><a href="https://kurti.sh/" target="_blank" rel="noopener">Kurtis Heimerl</a><img class="affil-logo uw" src="assets/uw_affiliation.png" alt=""></span>
-        </div>
-        <div class="author-row">
-          <span class="author-block"><a href="https://coe.northeastern.edu/people/abowd-gregory/" target="_blank" rel="noopener">Gregory D. Abowd</a><img class="affil-logo neu" src="assets/northeastern_affiliation.png" alt=""></span>
-          <span class="author-block"><a href="https://www.cs.washington.edu/people/faculty/shwetak-patel/" target="_blank" rel="noopener">Shwetak Patel</a><img class="affil-logo uw" src="assets/uw_affiliation.png" alt=""></span>
-          <span class="author-block"><a href="https://natashajaques.ai/" target="_blank" rel="noopener">Natasha Jaques</a><img class="affil-logo uw" src="assets/uw_affiliation.png" alt=""></span>
-          <span class="author-block"><a href="https://homes.cs.washington.edu/~vsiyer/" target="_blank" rel="noopener">Vikram Iyer</a><img class="affil-logo uw" src="assets/uw_affiliation.png" alt=""></span>
-        </div>
-      </div>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block"><sup>1</sup>University of Washington</span>
+              <br>
+              <span class="author-block"><sup>2</sup>University of California San Diego</span>
+              <br>
+              <span class="author-block"><sup>3</sup>Northeastern University</span>
+              <br>
+              <span class="author-block"><sup>*</sup>Equal contribution</span>
+            </div>
 
-      <div class="affiliations" aria-label="Affiliations">
-        <span class="affiliation-item"><img class="affil-logo uw" src="assets/uw_affiliation.png" alt="">University of Washington</span>
-        <span class="affiliation-item"><img class="affil-logo ucsd" src="assets/ucsd_affiliation.png" alt="">University of California San Diego</span>
-        <span class="affiliation-item"><img class="affil-logo neu" src="assets/northeastern_affiliation.png" alt="">Northeastern University</span>
-        <span class="affiliation-item"><span class="equal">*</span>Equal contribution</span>
-      </div>
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <!-- Paper Link. -->
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2606.16190" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-book-open"></i>
+                    </span>
+                    <span>Preprint</span>
+                  </a>
+                </span>
 
-      <div class="publication-links" aria-label="Project links">
-        <a class="button" href="https://arxiv.org/abs/2606.16190" target="_blank" rel="noopener">
-          <i class="fa-solid fa-file-lines" aria-hidden="true"></i>
-          <span>Preprint</span>
-        </a>
-        <a class="button" href="https://github.com/ubicomplab/embedded-arena" target="_blank" rel="noopener">
-          <i class="fa-brands fa-github" aria-hidden="true"></i>
-          <span>Code</span>
-        </a>
-        <a class="button" href="#run-benchmark">
-          <i class="fa-solid fa-microchip" aria-hidden="true"></i>
-          <span>Run Benchmark</span>
-        </a>
+                <!-- Code Link. -->
+                <span class="link-block">
+                  <a href="https://github.com/ubicomplab/embedded-arena"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
+
+                <!-- Leaderboard Link. -->
+                <span class="link-block">
+                  <a href="#leaderboard" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fa-solid fa-ranking-star"></i>
+                    </span>
+                    <span>Leaderboard</span>
+                  </a>
+                </span>
+
+                <!-- Run Link. -->
+                <span class="link-block">
+                  <a href="#run-benchmark" class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fa-solid fa-microchip"></i>
+                    </span>
+                    <span>Run Benchmark</span>
+                  </a>
+                </span>
+
+                <!-- <span class="link-block is-hidden-mobile" style="position: relative;">
+                  <details style="display: inline-block; vertical-align: middle; margin-top: 5px;">
+                    <summary class="external-link button is-normal is-rounded is-light" style="list-style: none; cursor: pointer; display: inline-flex; align-items: center; gap: 0.35rem; height: 2.6em; padding: 0 1.1em; box-sizing: border-box; background: #ffffff; border: 1px solid #e5e7eb; color: #363636;">
+                      <span class="icon">
+                        <i class="fas fa-scroll"></i>
+                      </span>
+                      <span>Related Research</span>
+                      <span class="icon">
+                        <i class="fas fa-chevron-down"></i>
+                      </span>
+                    </summary>
+                    <div style="position: absolute; right: 0; margin-top: 1.0rem; padding: 0.4rem 0.6rem; background: #ffffff; border-radius: 10px; border: 1px solid #e5e7eb; box-shadow: 0 4px 10px rgba(15, 23, 42, 0.12); text-align: left; min-width: 200px; z-index: 20;">
+                      <a href="https://dl.acm.org/doi/full/10.1145/3613905.3650764" style="display: block; color: #4a4a4a; font-weight: 600; padding: 0.35rem 0.25rem;">LLM for Embedded Systems</a>
+                    </div>
+                  </details>
+                </span> -->
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="section" aria-labelledby="benchmark-summary">
+
+  <section class="section">
     <div class="container">
-      <h2 id="benchmark-summary" class="section-title">Benchmark Summary</h2>
-      <div class="figure-wrap">
-        <div class="figure-card">
-          <img src="assets/benchmark_tradeoff.svg" alt="Average HIL deployment success versus token utilization across models and thinking levels">
-        </div>
-        <p class="caption">
-          <strong>Success versus token utilization.</strong>
-          Each point is one model at one thinking level in the HIL compression benchmark, averaged across the MAX78000 vision task and STM32N6 speech-to-IPA task. Points from the same model are connected from low to high thinking. The x-axis is reversed, so the top-right region corresponds to higher deployment success with lower token use.
-        </p>
+      <div style="display:flex;justify-content:center;gap:1.5%;align-items:flex-start;">
+        <img src="assets/teaser.jpg" alt="" style="width:93%;height:auto;">
       </div>
     </div>
   </section>
 
-  <section class="section" aria-labelledby="abstract">
+
+  <section class="section">
     <div class="container">
-      <h2 id="abstract" class="section-title">Abstract</h2>
-      <div class="content">
-        <p class="abstract-text">
-          Embedded devices from wildlife monitoring stations to clinical wearables require local AI inference due to latency, communication, or privacy constraints. Optimizing models for heterogeneous microcontrollers (MCUs) requires simultaneously satisfying hard physical constraints on memory, power, and temperature while preserving accuracy, a multidimensional optimization that is today performed manually by experts. We ask whether an LLM agent can autonomously navigate this complex, multi-turn pipeline guided by real hardware feedback, and introduce a hardware-in-the-loop agent arena in which the agent iteratively refines both model and firmware -- compiling, flashing, and measuring on real hardware -- to enable closed-loop optimization. Frontier models, including Claude Opus 4.7 and Gemini 3.1 Pro, fail entirely without hardware feedback (0% deployment success), whereas our hardware-in-the-loop formulation achieves the first successful deployment within three iterations and can surpass human expert results within seven. This agentic co-optimization achieves 250x compression for vision models with &lt;3.3% accuracy loss and 400x for audio with &lt;6% Feature Error Rate loss, enabling battery-free operation on a commercial MCU via solar harvesting. We demonstrate practical impact in two real-world systems: an elk-detection camera trap (96.7% accuracy) and a phonetic-transcription wearable (8.44% FER) for child development research.
-        </p>
+      <h2 class="title is-2" style="text-align: center;">Abstract</h2>
+      <div class="content has-text-justified" style="width: 93%; margin: 0 auto;">
+        <p class="abstract-text" style="font-size: 1rem; line-height: 1.5;">
+          Embedded devices from wildlife monitoring stations to clinical wearables require local AI inference due to
+          latency, communication, or privacy constraints.
+          Optimizing models for heterogeneous microcontrollers (MCUs) requires simultaneously satisfying hard physical
+          constraints on memory, power, and temperature while preserving accuracy, a multidimensional optimization that
+          is today performed manually by experts.
+          We ask whether an LLM agent can autonomously navigate this complex, multi-turn pipeline guided by real
+          hardware feedback, and introduce a hardware-in-the-loop agent arena in which the agent iteratively refines
+          both model and firmware—compiling, flashing, and measuring on real hardware—to enable closed-loop
+          optimization.
+          Frontier models, including Claude Opus 4.7 and Gemini 3.1 Pro, fail entirely without hardware feedback (0%
+          deployment success), whereas our hardware-in-the-loop formulation achieves the first successful deployment
+          within three iterations and can surpass human expert results within seven.
+          This agentic co-optimization achieves 250x compression for vision models with <3.3% accuracy loss and 400x for
+            audio with <6% Feature Error Rate loss, enabling battery-free operation on a commercial MCU via solar
+            harvesting. We demonstrate practical impact in two real-world systems: an elk-detection camera trap (96.7%
+            accuracy) and a phonetic-transcription wearable (8.44% FER) for child development research. </p>
       </div>
     </div>
   </section>
 
-  <section class="section" aria-labelledby="teaser">
+  
+  <section id="leaderboard" class="section">
     <div class="container">
-      <h2 id="teaser" class="section-title">Hardware-in-the-Loop Arena</h2>
-      <div class="figure-wrap">
-        <div class="figure-card">
-          <img src="assets/teaser.jpg" alt="Embedded Arena teaser showing the hardware-in-the-loop benchmark workflow">
+      <h2 class="title is-2" style="text-align: center;">MAX78000 Object Detection Leaderboard</h2>
+      <p style="text-align: center; width: 75%; margin: 0 auto 2rem; color: #4a4a4a;">
+        Best on-device mAP50-95 (YOLO11 on COCO) on the MAX78000, across three feedback conditions. 
+        Hardware-in-the-Loop (HIL) is the only condition that reliably produces successful deployments. 
+        Documentation (Doc) succeeds only once (with GPT-5.4), while the Score-only baseline never yields a successful deployment. 
+        The dashed line marks the human expert baseline (14.15%), which is outperformed by both Gemini 3.1 Pro (18.03%) and Claude Opus 4.7 (16.93%) using HIL.
+      </p>
+      <div class="lb-card">
+        <div class="lb-header">
+          <span class="lb-header-title">agent performance</span>
+          <span class="lb-header-meta">mAP50-95 &middot; MAX78000 &middot; COCO &middot; High thinking</span>
         </div>
-        <p class="caption">
-          <strong>Embedded Arena.</strong>
-          Agents iteratively edit model and firmware artifacts, while the benchmark compiles, flashes, measures, and returns structured physical feedback from real microcontroller hardware.
-        </p>
+        <div class="lb-chart">
+          <div class="lb-baseline" style="--lb-val: 14.15;">
+            <span class="lb-baseline-label">human expert&nbsp;14.15%</span>
+          </div>
+
+          <div class="lb-group">
+            <div class="lb-group-title">Gemini 3.1 Pro</div>
+            <div class="lb-row" data-tt="Gemini 3.1 Pro &middot; HIL" data-tv="mAP50-95&nbsp; 18.03%">
+              <span class="lb-name">HIL</span>
+              <div class="lb-bar-track">
+                <div class="lb-bar" style="width: calc(18.03 / var(--lb-max) * 100%);"><span class="lb-value">18.03%</span></div>
+              </div>
+            </div>
+            <div class="lb-row lb-fail" data-tt="Gemini 3.1 Pro &middot; Doc" data-tv="deployment&nbsp; failed">
+              <span class="lb-name">Doc</span>
+              <div class="lb-bar-track"><span class="lb-fail-x">&times;</span><span class="lb-fail-label">no successful deployment</span></div>
+            </div>
+            <div class="lb-row lb-fail" data-tt="Gemini 3.1 Pro &middot; Score" data-tv="deployment&nbsp; failed">
+              <span class="lb-name">Score</span>
+              <div class="lb-bar-track"><span class="lb-fail-x">&times;</span><span class="lb-fail-label">no successful deployment</span></div>
+            </div>
+          </div>
+
+          <div class="lb-group">
+            <div class="lb-group-title">Claude Opus 4.7</div>
+            <div class="lb-row" data-tt="Claude Opus 4.7 &middot; HIL" data-tv="mAP50-95&nbsp; 16.93%">
+              <span class="lb-name">HIL</span>
+              <div class="lb-bar-track">
+                <div class="lb-bar" style="width: calc(16.93 / var(--lb-max) * 100%);"><span class="lb-value">16.93%</span></div>
+              </div>
+            </div>
+            <div class="lb-row lb-fail" data-tt="Claude Opus 4.7 &middot; Doc" data-tv="deployment&nbsp; failed">
+              <span class="lb-name">Doc</span>
+              <div class="lb-bar-track"><span class="lb-fail-x">&times;</span><span class="lb-fail-label">no successful deployment</span></div>
+            </div>
+            <div class="lb-row lb-fail" data-tt="Claude Opus 4.7 &middot; Score" data-tv="deployment&nbsp; failed">
+              <span class="lb-name">Score</span>
+              <div class="lb-bar-track"><span class="lb-fail-x">&times;</span><span class="lb-fail-label">no successful deployment</span></div>
+            </div>
+          </div>
+
+          <div class="lb-group">
+            <div class="lb-group-title">GPT-5.4</div>
+            <div class="lb-row" data-tt="GPT-5.4 &middot; HIL" data-tv="mAP50-95&nbsp; 12.07%">
+              <span class="lb-name">HIL</span>
+              <div class="lb-bar-track">
+                <div class="lb-bar" style="width: calc(12.07 / var(--lb-max) * 100%);"><span class="lb-value">12.07%</span></div>
+              </div>
+            </div>
+            <div class="lb-row" data-tt="GPT-5.4 &middot; Doc" data-tv="mAP50-95&nbsp; 8.42%">
+              <span class="lb-name">Doc</span>
+              <div class="lb-bar-track">
+                <div class="lb-bar" style="width: calc(8.42 / var(--lb-max) * 100%);"><span class="lb-value">8.42%</span></div>
+              </div>
+            </div>
+            <div class="lb-row lb-fail" data-tt="GPT-5.4 &middot; Score" data-tv="deployment&nbsp; failed">
+              <span class="lb-name">Score</span>
+              <div class="lb-bar-track"><span class="lb-fail-x">&times;</span><span class="lb-fail-label">no successful deployment</span></div>
+            </div>
+          </div>
+        </div>
       </div>
+      <br>
+      <br>
+      <div style="text-align: center;">
+        <img src="assets/compression_high.jpg" class="interpolation-image" style="width: 75%; height: auto;" />
+      </div>
+      <p style="text-align: justify; width: 75%; margin: 12px auto 0;">
+        <b>Hardware-in-the-Loop Enables Iterative Improvement in Model Compression.</b> <b>a,</b> YOLO on MAX78000,
+        where Gemini 3.1 Pro surpasses the human expert best model 14.15% by iteration 7.
+        <b>b,</b> Wav2Vec2 on STM32N6. In both tasks agents hill-climb steadily.
+      </p>
     </div>
   </section>
+
 
   <section id="run-benchmark" class="section" aria-labelledby="run-title">
     <div class="container">
-      <h2 id="run-title" class="section-title">Run the Benchmark</h2>
+      <h2 class="title is-2" style="text-align: center;">How to Run Embedded Arena</h2>
       <div class="run-panel">
         <ol class="steps">
           <li>
@@ -533,7 +315,8 @@ cp .env.example .env</code></pre>
           <li>
             <div>
               <h3>Add model provider keys.</h3>
-              <p>Edit <code>.env</code> with the providers you plan to evaluate. Scripted smoke tests do not need keys.</p>
+              <p>Edit <code>.env</code> with the providers you plan to evaluate. Scripted smoke tests do not need keys.
+              </p>
               <pre><code>OPENAI_API_KEY=...
 GOOGLE_API_KEY=...
 ANTHROPIC_API_KEY=...
@@ -551,14 +334,16 @@ huggingface-cli login
 ./scripts/setup_esp32.sh
 ./scripts/setup_stm32ai.sh /path/to/x-cube-ai-macarm-v10.2.0.zip</code></pre>
               <p class="mini-links">
-                See <a href="setup.md">full setup notes</a>, <a href="data-assets.md">data/assets</a>, and <a href="hardware.md">hardware wiring</a>.
+                See <a href="setup.md">full setup notes</a>, <a href="data-assets.md">data/assets</a>, and <a
+                  href="hardware.md">hardware wiring</a>.
               </p>
             </div>
           </li>
           <li>
             <div>
               <h3>Validate the software setup.</h3>
-              <p>The doctor and smoke checks verify Docker, assets, local SDK paths, and software-only synthesis/compile flows.</p>
+              <p>The doctor and smoke checks verify Docker, assets, local SDK paths, and software-only synthesis/compile
+                flows.</p>
               <pre><code>embedded-arena doctor
 python scripts/check_configs.py
 CLI_LLM_SCRIPT=examples/cli_smoke_gradient_flow.jsonl \
@@ -582,10 +367,17 @@ CLI_LLM_SCRIPT=examples/cli_smoke_gradient_flow.jsonl \
     </div>
   </section>
 
+
   <footer class="footer">
     <div class="container">
-      <p>Questions? Please email Zhihan Zhang at z{first name}@cs.washington.edu or Vikram Iyer at vs{last name}@uw.edu</p>
+      <div class="content has-text-centered">
+        <p>
+          Questions? Please email Zhihan Zhang at z{first name}@cs.washington.edu or Vikram Iyer at vs{last name}@uw.edu
+        </p>
+      </div>
     </div>
   </footer>
+
 </body>
+
 </html>
