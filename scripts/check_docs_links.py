@@ -31,7 +31,10 @@ def local_target_exists(source: Path, raw: str) -> bool:
     parsed = urlparse(target)
     if parsed.scheme or target.startswith("//"):
         return True
-    path = (source.parent / target).resolve()
+    if target.startswith("/"):
+        path = (ROOT / target.lstrip("/")).resolve()
+    else:
+        path = (source.parent / target).resolve()
     try:
         path.relative_to(ROOT)
     except ValueError:

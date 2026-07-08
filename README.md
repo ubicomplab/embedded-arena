@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="logo.png" alt="EmbeddedArena logo" width="220">
-</p>
-
 # EmbeddedArena
 
 [![CI](https://github.com/ubicomplab/embedded-arena/actions/workflows/ci.yml/badge.svg)](https://github.com/ubicomplab/embedded-arena/actions/workflows/ci.yml)
